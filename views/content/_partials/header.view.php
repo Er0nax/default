@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container px-4 px-lg-5">
-        <a class="navbar-brand click" data-page="index">Default</a>
+        <a class="navbar-brand click" href="index" data-page="index">Default</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -23,6 +23,7 @@
                             <?php if ($app->page->info['isRawPage'] == 'false'): ?>
                                 <li class="nav-item">
                                     <a class="nav-link click <?= $activeClass ?>"
+                                       href="<?= $name ?>"
                                        data-page="<?= $name ?>">
                                         <?= $title ?>
                                     </a>

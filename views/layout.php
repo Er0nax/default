@@ -12,7 +12,7 @@
 
     <title><?= $app->env->variables['TITLE'] ?> | <?= $app->page->info['title'] ?></title>
 
-    <link rel="icon" type="image/x-icon" href="assets/img/icons/favicon.ico"/>
+    <link rel="icon" type="image/x-icon" href="assets/images/icons/favicon.ico"/>
 
     <!-- CSS Files -->
     <?php if (!empty($app->page->cssFiles)) : ?>

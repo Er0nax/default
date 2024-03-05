@@ -186,9 +186,15 @@ class PageController extends Controller
 
         // page found?
         if (empty($page)) {
-            // redirect?
             if ($redirect) $this->redirect('error');
             return false;
+        }
+
+        // is active?
+        if ($page['isActive'] === 'false') {
+            if ($redirect) {
+                $this->redirect('error');
+            }
         }
 
         if ($forHeader) {
@@ -217,13 +223,6 @@ class PageController extends Controller
             if ($this->isLoggedIn) {
                 if ($redirect) $this->redirect('index');
                 return false;
-            }
-        }
-
-        // is active?
-        if ($page['isActive'] == 'false') {
-            if ($redirect) {
-                $this->redirect('error');
             }
         }
 

@@ -33,9 +33,13 @@ CREATE TABLE IF NOT EXISTS `pages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `index` (`index`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='0 => ''Menu'',\r\n1 => ''Company'',\r\n2 => ''Trucklm'',\r\n3 => ''Personal''';
 
--- Daten Export vom Benutzer nicht ausgewählt
+-- Exportiere Daten aus Tabelle enxvisuals.pages: ~2 rows (ungefähr)
+DELETE FROM `pages`;
+INSERT INTO `pages` (`id`, `index`, `showAlways`, `hideInHeader`, `mustBeLoggedIn`, `isRawPage`, `isActive`, `showPreloader`, `color`, `icon`, `name`, `title`, `headline`, `subline`) VALUES
+	(1, 1, 'true', 'false', 'both', 'false', 'true', 'false', '#9899ac', 'circle', 'index', 'Home', 'What\'s up?', ''),
+	(2, 99, 'false', 'true', 'both', 'false', 'true', 'false', '#9899ac', 'circle', 'error', 'Error', 'Something went wrong', '');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
