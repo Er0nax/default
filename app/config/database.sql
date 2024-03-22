@@ -57,8 +57,10 @@ CREATE TABLE IF NOT EXISTS `translations` (
   UNIQUE KEY `value` (`value`) USING HASH
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle enxvisuals.translations: ~0 rows (ungefähr)
+-- Exportiere Daten aus Tabelle enxvisuals.translations: ~1 rows (ungefähr)
 DELETE FROM `translations`;
+INSERT INTO `translations` (`id`, `value`, `category`, `de`, `en`, `active`, `updatedAt`, `createdAt`) VALUES
+	(1, 'Here you can find some cool information!', 'site', 'Hier sind nützliche Informationen!', 'Here you can find some cool information!', 'true', '2024-03-22 09:47:47', '2024-03-22 09:47:32');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
