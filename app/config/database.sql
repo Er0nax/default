@@ -20,10 +20,12 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `index` int(11) NOT NULL DEFAULT 0,
   `showAlways` enum('true','false') NOT NULL DEFAULT 'false',
   `hideInHeader` enum('true','false') NOT NULL DEFAULT 'false',
+  `hideInFooter` enum('true','false') NOT NULL DEFAULT 'false',
   `mustBeLoggedIn` enum('true','false','both') NOT NULL DEFAULT 'both',
   `isRawPage` enum('true','false') NOT NULL DEFAULT 'false',
-  `isActive` enum('true','false') NOT NULL DEFAULT 'true',
+  `active` enum('true','false') NOT NULL DEFAULT 'true',
   `showPreloader` enum('true','false') NOT NULL DEFAULT 'false',
+  `category` enum('normal','info') NOT NULL DEFAULT 'normal',
   `color` varchar(10) NOT NULL DEFAULT '#9899ac',
   `icon` varchar(100) NOT NULL DEFAULT 'circle',
   `name` varchar(100) NOT NULL,
@@ -33,13 +35,30 @@ CREATE TABLE IF NOT EXISTS `pages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `index` (`index`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='0 => ''Menu'',\r\n1 => ''Company'',\r\n2 => ''Trucklm'',\r\n3 => ''Personal''';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 -- Exportiere Daten aus Tabelle enxvisuals.pages: ~2 rows (ungefähr)
 DELETE FROM `pages`;
-INSERT INTO `pages` (`id`, `index`, `showAlways`, `hideInHeader`, `mustBeLoggedIn`, `isRawPage`, `isActive`, `showPreloader`, `color`, `icon`, `name`, `title`, `headline`, `subline`) VALUES
-	(1, 1, 'true', 'false', 'both', 'false', 'true', 'false', '#9899ac', 'circle', 'index', 'Home', 'What\'s up?', ''),
-	(2, 99, 'false', 'true', 'both', 'false', 'true', 'false', '#9899ac', 'circle', 'error', 'Error', 'Something went wrong', '');
+INSERT INTO `pages` (`id`, `index`, `showAlways`, `hideInHeader`, `hideInFooter`, `mustBeLoggedIn`, `isRawPage`, `active`, `showPreloader`, `category`, `color`, `icon`, `name`, `title`, `headline`, `subline`) VALUES
+	(1, 1, 'false', 'false', 'false', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'index', 'Home', '', ''),
+	(2, 100, 'false', 'true', 'true', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'error', 'Error', '', '');
+
+-- Exportiere Struktur von Tabelle enxvisuals.translations
+CREATE TABLE IF NOT EXISTS `translations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `value` varchar(1000) NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `de` varchar(1000) NOT NULL,
+  `en` varchar(1000) NOT NULL,
+  `active` enum('true','false') NOT NULL DEFAULT 'true',
+  `updatedAt` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `value` (`value`) USING HASH
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Exportiere Daten aus Tabelle enxvisuals.translations: ~0 rows (ungefähr)
+DELETE FROM `translations`;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

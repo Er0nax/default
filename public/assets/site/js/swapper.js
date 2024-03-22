@@ -1,13 +1,23 @@
 import * as basics from "./basics.js";
+import * as init from "./init.js";
 
 $(document).ready(function () {
 
     // create global variables
     const form = new FormData();
     const pageHistory = [];
+    const clickClass = '.click';
+    const clickBackClass = '.click-back';
+    const isReloadTarget = 'data-isreload';
+    const dataPage = 'data-page';
+    const dataParam = 'data-param';
+    const contentPage = '_content.php';
+    const activeClass = 'active';
+    const toggleMenuBtn = '.canvas__open';
+    const contentFadeIn = false;
 
     // listen to button clicks
-    $(document).on("click", '.click', async function (event) {
+    $(document).on("click", clickClass, async function (event) {
         // prevent defaults
         event.preventDefault();
 
@@ -25,17 +35,17 @@ $(document).ready(function () {
 
     const getReload = async (target) => {
         // is valid?
-        if (!target.attr('data-isreload')) {
+        if (!target.attr(isReloadTarget)) {
             return false;
         }
 
         // is undefined?
-        if (target.attr('data-isreload') == 'undefined') {
+        if (target.attr(isReloadTarget) == 'undefined') {
             return false;
         }
 
         // is true?
-        if (target.attr('dada-isreload') == 'true') {
+        if (target.attr(isReloadTarget) == 'true') {
             return true;
         }
 
@@ -43,7 +53,7 @@ $(document).ready(function () {
         return false;
     }
 
-    const setPage = async (page, param, isReload) => {
+    const setPage = async (page, param, isReload = false, isBack = false) => {
         // show loading line
         await basics.toggleLoadingLine(true);
 
@@ -57,8 +67,7 @@ $(document).ready(function () {
         // on success
         if (content) {
             if (!isReload) {
-                await onSuccess();
-            } else {
+                await onSuccess(isBack);
             }
         } else {
             Swal.fire({
@@ -78,43 +87,79 @@ $(document).ready(function () {
         await pageGoBack();
     });
 
-    $(document).on("click", '.click-back', async function (event) {
+    $(document).on("click", clickBackClass, async function (event) {
         event.preventDefault();
         await pageGoBack();
     });
 
-    const pageGoBack = async () => {
+    const getBackPage = () => {
         // get the total length of array
-        const length = pageHistory.length;
+        const total = pageHistory.length;
+        let page = 'index';
 
-        // get penultimate one
-        let page = pageHistory[length - 2];
-        let param = 'undefined';
-        let currentPage = basics.getCurrentPage()['page'];
+        // history not empty?
+        if (total) {
 
-        if (!page) {
-            return;
+            // only 1 page exist?
+            if (total === 1) {
+                return pageHistory[0];
+            }
+
+            // at least 2 pages exist in array
+            if (total >= 2) {
+                // save before last page
+                const pageTemp = pageHistory[total - 2];
+
+                // remove last page from arry
+                pageHistory.pop();
+
+                return pageTemp;
+            }
         }
 
-        // check if page includes parameter
-        if (page.includes("&")) {
-            // get the parameter
-            param = '&' + page.split('&')[1];
-            page = page.split('&')[0];
+        return page;
+    }
+
+    function extractValues(content) {
+
+        const parts = content.split("&");
+
+        let page = null;
+        let param = "";
+
+        if (parts[0].includes("=")) {
+            page = parts[0].split("=")[1];
+        } else {
+            page = parts[0];
         }
 
-        if (page) {
-            // start logic
-            await setPage(page, param);
+        if (parts.length > 1) {
+            param = parts.slice(1).join("&");
+        }
+
+        if (param) {
+            param = "&" + param;
+        }
+
+        return {page, param};
+    }
+
+    const pageGoBack = async () => {
+        let _page = getBackPage();
+
+        const {page: extractedPage, param: extractedParam} = extractValues(_page);
+
+        if (extractedPage) {
+            await setPage(extractedPage, extractedParam, false, true);
         }
     }
 
-    const onSuccess = async () => {
+    const onSuccess = async (isBack) => {
         // get the new page
         let page = form.get('page');
-        let param = form.get('param');
+        let param = form.get('param') || '';
 
-        if (!param || param == 'undefined') {
+        if (param === 'undefined') {
             param = '';
         }
 
@@ -124,52 +169,57 @@ $(document).ready(function () {
         // set new active status
         await setActiveStatus(page);
 
-        // add to history
-        pageHistory.push(page + param);
+        if (!isBack) {
+            // check if the new page is different from the last one in history
+            const currentPage = page + param;
+            const lastPageInHistory = pageHistory.slice(-1)[0];
+            if (lastPageInHistory !== currentPage) {
+                pageHistory.push(currentPage);
 
-        // update reload btn
-        const reloadBtn = $('.page-btn-reload');
-        reloadBtn.attr('data-page', page);
-        reloadBtn.attr('data-param', param);
-
-        // switch & with ? for look
-        if (param) {
-            param = param.replace(param.charAt(0), "?");
-        }
-
-        if (!param) {
-            switch (page) {
-                case 'index':
+                // modify param if necessary
+                if (param) {
+                    param = param.replace(param.charAt(0), "?");
+                }
+                if (page === 'index') {
                     page = '';
-                    break;
+                }
+
+                // add to browser history
+                await history.pushState({}, '', basics.getUrl() + page + param);
             }
         }
 
-        // add also to browser history
-        await history.pushState({}, '', basics.getUrl() + page + param);
+        // update reload btn
+        const reloadBtn = $('.page-btn-reload');
+        reloadBtn.attr('data-page', page.toString());
+        reloadBtn.attr('data-param', param.replace(param.charAt(0), "&").toString());
 
         // close the sidebar
-        await closeSidebarMobile();
+        await doMobileAction(isBack);
 
         // scroll to top
-        if (window.auto_scroll_top) {
-            setTimeout(
-                async function () {
-                    await window.scrollTo(0, 0);
-                }, 100);
+        if (auto_scroll_top) {
+            setTimeout(async () => {
+                await window.scrollTo(0, 0);
+            }, 100);
         }
     }
 
     const reInit = async (page) => {
+        // specific page
         switch (page) {
             case 'pagename':
             // reinit something...
         }
+
+        // reinit after every page swap
     }
 
-    const closeSidebarMobile = async () => {
-        if ($(window).width() < 1200) {
-            // close the sidebars ...
+    const doMobileAction = async (isBack) => {
+        if (!isBack) {
+            if ($(window).width() < 1200) {
+                // close the sidebars ...
+            }
         }
     }
 
@@ -180,12 +230,12 @@ $(document).ready(function () {
 
     // return the page from data attribute
     const getPage = (target) => {
-        return target.attr('data-page');
+        return target.attr(dataPage);
     }
 
     // return the param from data attribute
     const getParam = (target) => {
-        let param = target.attr('data-param');
+        let param = target.attr(dataParam);
 
         if (!param) {
             return '';
@@ -228,7 +278,7 @@ $(document).ready(function () {
         }
 
         // add to the url
-        url = url + '_content.php?page=' + page + param;
+        url = url + contentPage + '?page=' + page + param;
 
         // get the content
         try {
@@ -244,8 +294,11 @@ $(document).ready(function () {
     const setContent = async (content, page) => {
         // check if content is given
         if (content) {
-            await $('#pagecontent').hide().html(content).fadeIn(100);
-
+            if (contentFadeIn) {
+                await $('#pagecontent').hide().html(content).fadeIn(100);
+            } else {
+                await $('#pagecontent').html(content);
+            }
             // re-init
             await reInit(page);
         }
@@ -257,7 +310,10 @@ $(document).ready(function () {
         let page = form.get('page');
 
         // un-active all current buttons
-        $('.click').removeClass("active");
+        $(clickClass).removeClass(activeClass);
+
+        // un-active all in menu
+        $('.header__menu li').removeClass(activeClass);
 
         // remove from search bar
         if (page !== 'search') {
@@ -271,7 +327,10 @@ $(document).ready(function () {
         }
 
         // set active class for all buttons with page attribute
-        $(".click[data-page='" + page + "']").addClass('active');
+        $(clickClass + "[data-page='" + page + "']").addClass(activeClass);
+
+        // set active class in menu
+        $('.header__menu li' + "[data-page='" + page + "']").addClass(activeClass);
     }
 
     /**
@@ -279,7 +338,7 @@ $(document).ready(function () {
      */
     const setCurrentPageToHistory = () => {
         const response = basics.getCurrentPage();
-        const page = response['page'];
+        let page = response['page'];
         let param = response['params'];
 
         pageHistory.push(page + param);
@@ -287,6 +346,10 @@ $(document).ready(function () {
         // switch & with ? for look
         if (param) {
             param = param.replace(param.charAt(0), "?");
+        }
+
+        if (page === 'index' || page == null) {
+            page = '';
         }
 
         history.pushState({}, '', basics.getUrl() + page + param);

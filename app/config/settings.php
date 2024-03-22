@@ -11,6 +11,9 @@ class settings
     public string $jsVersion = '1.0.0';
     public string $manifestVersion = '1.0.0';
     public ?string $url = null;
+    public array $siteJsSettings = [
+        'auto_scroll_top' => 'true'
+    ];
     private env $env;
 
     /**

@@ -10,7 +10,7 @@ class Content
 {
     private ?string $page = null;
     private ?string $param = null;
-    private string $defaultPage = 'error';
+    private string $defaultPage = 'index';
 
     /**
      * constructor

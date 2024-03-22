@@ -22,6 +22,7 @@ class PageController extends Controller
         'mustBeLoggedIn' => 'both',
         'hideInHeader' => 'false',
         'showAlways' => 'true',
+        'showPreloader' => 'false'
     ];
     private array $error = [
         'name' => 'error',
@@ -34,6 +35,7 @@ class PageController extends Controller
         'mustBeLoggedIn' => 'both',
         'hideInHeader' => 'true',
         'showAlways' => 'false',
+        'showPreloader' => 'false'
     ];
     public array $cssFiles = [];
     public array $jsFiles = [];
@@ -74,6 +76,7 @@ class PageController extends Controller
      */
     public function getPage(string $name = null, bool $redirect = true): array
     {
+
         // check if rules were passed
         if (!$this->followsRules($name, $redirect)) {
             // show homepage
@@ -91,7 +94,7 @@ class PageController extends Controller
         $entry = new Entry();
         $result = $entry->columns(['pages' => ['*']])
             ->tables(['pages'])
-            ->where(['pages' => [['name', $name]]])
+            ->where(['pages' => [['name', $name], ['active', 'true']]])
             ->one();
 
         if (!empty($result)) {
@@ -175,7 +178,7 @@ class PageController extends Controller
      * @param bool $forHeader
      * @return bool
      */
-    public function followsRules(string $_page = null, bool $redirect = true, bool $forHeader = false): bool
+    public function followsRules(string $_page = null, bool $redirect = true, string $type = 'unknown', string $category = 'any'): bool
     {
         // get page
         $entry = new Entry();
@@ -191,16 +194,29 @@ class PageController extends Controller
         }
 
         // is active?
-        if ($page['isActive'] === 'false') {
-            if ($redirect) {
-                $this->redirect('error');
-            }
+        if ($page['active'] === 'false') {
+            if ($redirect) $this->redirect('error');
+            return false;
         }
 
-        if ($forHeader) {
+        if ($type == 'header') {
             // hide the page in the header?
             if ($page['hideInHeader'] == 'true') {
                 if ($redirect) $this->redirect('error');
+                return false;
+            }
+        }
+
+        if ($type == 'footer') {
+            // hide the page in the header?
+            if ($page['hideInFooter'] == 'true') {
+                if ($redirect) $this->redirect('error');
+                return false;
+            }
+        }
+
+        if ($category != $page['category']) {
+            if ($category != 'any') {
                 return false;
             }
         }
@@ -229,16 +245,7 @@ class PageController extends Controller
         // check if user is not logged in but wants to see profile
         if (empty($_SESSION['user']['id'])) {
             if ($_page == 'profile') {
-                if ($forHeader) {
-                    return false;
-                }
-
-                if (!empty($_GET['id'])) {
-                    return true;
-                } else {
-                    if ($redirect) $this->redirect('login');
-                    return false;
-                }
+                // profile content
             }
         }
 
@@ -279,7 +286,7 @@ class PageController extends Controller
         // check if all pages also exist in project
         foreach ($pages as $page) {
             if ($this->exists($page['name'])) {
-                $this->pages[] = $page;
+                $this->pages[$page['name']] = $page;
             }
         }
     }

@@ -1,3 +1,3 @@
 <?php
 
-include('../views/content/_partials/footer.view.php');
+include('../views/_partials/footer.view.php');

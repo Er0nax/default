@@ -10,6 +10,7 @@ class Main
      */
     public function __construct()
     {
-
+        // remove page from get
+        unset($_GET['page']);
     }
 }

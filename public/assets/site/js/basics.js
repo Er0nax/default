@@ -1,8 +1,18 @@
-export async function toggleLoadingLine(show) {
+export async function toggleLoadingLine(show, showSpinner = false) {
     if (show) {
-        await $('.loading-line').show();
+        if (showSpinner) {
+            await $(".loader").show();
+            await $("#preloder").show();
+        } else {
+            await $('.loading-line').show();
+        }
     } else {
-        await $('.loading-line').hide();
+        if (showSpinner) {
+            await $(".loader").fadeOut(100);
+            await $("#preloder").fadeOut(100);
+        } else {
+            await $('.loading-line').hide();
+        }
     }
 }
 
@@ -11,11 +21,16 @@ export function getUrl() {
     return siteUrl;
 }
 
-export async function sendPost(data, returnResponse = false, sendSwal = false, redirectOnSuccess = false, url = null) {
+export async function sendPost(data, returnResponse = false, sendSwal = false, showLoadingAnimation = true, showSpinner = false) {
+
     // default values
     let status = 'error';
     let content = 'Something went wrong.';
     let response = [];
+
+    if (showLoadingAnimation) {
+        await toggleLoadingLine(true, showSpinner);
+    }
 
     // do ajax post
     try {
@@ -46,11 +61,8 @@ export async function sendPost(data, returnResponse = false, sendSwal = false, r
         await showSwal(status, content);
     }
 
-    // is success and redirect on success?
-    if (status === 'success' && redirectOnSuccess) {
-        if (url) {
-            window.location.href = url;
-        }
+    if (showLoadingAnimation) {
+        await toggleLoadingLine(false, showSpinner);
     }
 
     if (returnResponse) {
@@ -79,20 +91,20 @@ export function getCurrentPage() {
 
     // declare values
     const response = [];
-    let page = null;
-    let param = null;
+    let page;
+    let param;
 
     // default values
     response['page'] = 'index';
     response['params'] = ''
 
     // page not empty?
-    if ((page = paths[paths.length - 1]) != null) {
+    if ((page = paths[paths.length - 1])) {
         response['page'] = page;
     }
 
     // params not empty?
-    if ((param = params[params.length - 1]) != null && params.length - 1 !== 0) {
+    if ((param = params[params.length - 1]) != null && params.length - 1) {
         response['params'] = "&" + param;
     }
 

@@ -21,6 +21,15 @@ class Entry extends Controller
     private ?string $order = null;
     private ?string $type = null;
     public ?string $queryDump = null;
+    private bool $distinct = false;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // reset
+        $this->distinct = false;
+    }
 
     /**
      * find single entry
@@ -183,9 +192,9 @@ class Entry extends Controller
 
     /**
      * find multiple entries
-     * @return array|false
+     * @return array
      */
-    public function all(): bool|array
+    public function all(): array
     {
         // get the result
         try {
@@ -201,7 +210,13 @@ class Entry extends Controller
         }
 
         // return the result
-        return $result->fetchAll(PDO::FETCH_ASSOC);
+        $return = $result->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($return)) {
+            return $return;
+        }
+
+        return [];
     }
 
     /**
@@ -254,10 +269,11 @@ class Entry extends Controller
      * 'users.username, users.description, roles.name, roles.description'
      * @return $this
      */
-    public function columns($columns): static
+    public function columns($columns, $distinct = false): static
     {
         // set query string
         $columnsString = '';
+        $this->distinct = $distinct;
 
         // check if colmuns are defined
         if (!empty($columns)) {
@@ -308,8 +324,8 @@ class Entry extends Controller
     /**
      * creates the where query string
      * possible inputs:
-     * ['users' => [['username', 'Eronax'], ['deleted', 'false']], 'roles' => [['id', '1']]]
-     * users.username = 'Eronax' AND users.deleted = 'false' AND roles.id = '1'
+     * ['users' => [['username', 'Eronax'], ['deleted', 'false', '!=']], 'roles' => [['id', 'anothertable.id', '=', true]]]
+     * users.username = 'Eronax' AND users.deleted != 'false' AND roles.id = anothertable.id
      * @return $this
      */
     public function where($where, $operator = 'AND'): static
@@ -317,15 +333,15 @@ class Entry extends Controller
         // create query string
         $whereString = '';
 
-        // check if colmuns are defined
+        // check if columns are defined
         if (!empty($where)) {
 
-            // check if is array
+            // check if array
             if (is_array($where)) {
 
                 $isFirstLine = false;
 
-                // loop throug all wheres
+                // loop through all where's
                 foreach ($where as $table => $conditions) {
 
                     // check if $conditions are set and array
@@ -334,8 +350,13 @@ class Entry extends Controller
                             $column = $condition[0];
                             $is = $condition[1];
                             $customEqual = $condition[2] ?? '=';
+                            $isCustomEqual = $condition[3] ?? false;
 
-                            $singleString = $table . '.' . $column . $customEqual . '"' . $is . '"';
+                            if (!$isCustomEqual) {
+                                $singleString = $table . '.' . $column . ' ' . $customEqual . ' ' . '"' . $is . '"';
+                            } else {
+                                $singleString = $table . '.' . $column . ' ' . $customEqual . ' ' . $is;
+                            }
 
                             if (!$isFirstLine) {
                                 $whereString = $singleString;
@@ -353,7 +374,7 @@ class Entry extends Controller
             }
         }
 
-        $whereString = '(' . $whereString . ')';
+        $whereString = '(' . $whereString . ")";
 
         // add columns
         $this->where = $whereString;
@@ -440,9 +461,15 @@ class Entry extends Controller
 
             // type still given?
             if (!empty($type)) {
-                $query = 'SELECT ' . $type . '(' . $columns . ') FROM ' . $tables;
+                $query = $type . '(' . $columns . ') FROM ' . $tables;
             } else {
-                $query = 'SELECT ' . $columns . ' FROM ' . $tables;
+                $query = $columns . ' FROM ' . $tables;
+            }
+
+            if ($this->distinct) {
+                $query = 'SELECT DISTINCT ' . $query;
+            } else {
+                $query = 'SELECT ' . $query;
             }
         }
 
@@ -509,11 +536,95 @@ class Entry extends Controller
     public function dumpQuery($die = true): void
     {
         try {
-            Controller::_connect();
             $query = $this->buildQuery();
-            _dump($query, $die);
+
+            echo '<pre style="color: white; background: rgba(0, 0, 0, 0.5); padding: 10px;">';
+            var_dump($query);
+            echo '</pre>';
+
+            if ($die) {
+                die();
+            }
+
         } catch (\Exception) {
             // nothin
+        }
+    }
+
+    /**
+     * @param string $table
+     * @param array $keysAndValues
+     * @return bool
+     */
+    public function insert(string $table, array $keysAndValues): bool
+    {
+
+        // table given?
+        if (empty($table)) {
+            return false;
+        }
+
+        // values given?
+        if (empty($keysAndValues)) {
+            return false;
+        }
+
+        // entry already exists?
+        $entry = new Entry();
+
+        // build where part for query
+        $where = [];
+        foreach ($keysAndValues as $key => $value) {
+            $where[$table][] = [$key, $value];
+        }
+
+        // build query
+        $exists = $entry->columns('*')->tables($table)->where($where)->exists();
+
+        // entry found?
+        if ($exists) {
+            return false;
+        }
+
+        // build keys and values strings
+        $keys = [];
+        $values = [];
+        foreach ($keysAndValues as $key => $value) {
+
+            // any part not given?
+            if (empty($key) || empty($value)) {
+                return false;
+            }
+
+            // add em
+            $keys[] = $key;
+            $values[] = ':' . $key;
+        }
+
+        try {
+            global $db;
+            // set the PDO error mode to exception
+            $db->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            // Vorbereiten der SQL-Anweisung
+            $sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $keys) . ') VALUES (' . implode(',', $values) . ')';
+
+            // Vorbereiten der Anweisung
+            $stmt = $db->con->prepare($sql);
+
+            // Werte binden
+            foreach ($keysAndValues as $key => $_value) {
+                $param = ':' . $key;
+                $stmt->bindValue($param, $_value);
+            }
+
+            // Ausführen der Anweisung
+            $stmt->execute();
+
+            return true;
+
+        } catch (PDOException $e) {
+            return false;
         }
     }
 }

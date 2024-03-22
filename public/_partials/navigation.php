@@ -1,3 +1,3 @@
 <?php
 
-include('../views/content/_partials/navigation.view.php');
+include('../views/_partials/navigation.view.php');

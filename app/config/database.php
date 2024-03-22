@@ -32,14 +32,19 @@ class database
         $user = $this->getEnvVariable('DBUSER');
         $pass = $this->getEnvVariable('DBPASS');
 
-        $connectionString = 'mysql:host=' . $host . ';dbname=' . $name;
+        try {
 
-        $this->con = new PDO($connectionString, $user, $pass);
-        $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->con->exec('set names utf8mb4');
+            $connectionString = 'mysql:host=' . $host . ';dbname=' . $name;
 
-        // unset unsafe variables
-        $this->env = false;
+            $this->con = new PDO($connectionString, $user, $pass);
+            $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->con->exec('set names utf8mb4');
+
+            // unset unsafe variables
+            $this->env = false;
+        } catch (Exception $e) {
+            die('app/config/database <br>' . $e);
+        }
     }
 
     /**
