@@ -66,3 +66,13 @@
         Create a new site module with the same name in <b>"app/modules/site/-name-.php"</b>
     </li>
 </ul>
+
+<h4>How to add translations</h4>
+<ul>
+    <li>
+        When outputting a variable on the site, put it inside the t("variable"); function. It will automaticly add it to the translation table.
+    </li>
+    <li>
+        When first opening the website, all translations will be saved in a session array, which will then be accessed.
+    </li>
+</ul>
