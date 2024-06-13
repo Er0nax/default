@@ -1,0 +1,76 @@
+{% set assetPath = getEnv('ASSET_URL') %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no shrink-to-fit=no">
+    <meta http-equiv="content-Type" content="text/html; utf-8"/>
+    <meta http-equiv="Pragma" content="cache"/>
+    <meta name="robots" content="INDEX,FOLLOW"/>
+    <meta http-equiv="content-Language" content="{{ getEnv('LANG') }}"/>
+    <meta name="description" content="{{ getEnv('DESCRIPTION') }}"/>
+    <meta name="keywords" content="{{ getEnv('KEYWORDS') }}"/>
+    <meta name="author" content="{{ getEnv('AUTHOR') }}"/>
+    <meta name="publisher" content="{{ getEnv('PUBLISHER') }}"/>
+    <meta name="copyright" content="{{ getEnv('COPYRIGHT') }}"/>
+    <meta name="audience" content="All"/>
+    <meta name="page-type" content="Community"/>
+    <meta name="page-topic" content="Community"/>
+    <meta http-equiv="Reply-to" content="{{ getEnv('EMAIL') }}"/>
+    <meta name="expires" content=""/>
+    <meta name="revisit-after" content="2 days"/>
+    <meta name="theme-color" content="{{ getEnv('THEME_COLOR') }}"/>
+    <link rel="icon" type="image/x-icon" href="{{ assetPath }}manifest/icons/icon-48x48.png">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ assetPath }}manifest/icons/icon-48x48.png">
+
+    <title>{{ page }} | {{ getEnv('TITLE') }}</title>
+
+    <!-- CSS Files -->
+    <link type="text/css" rel="stylesheet" href="test.css">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="{{ assetPath }}manifest/manifest.webmanifest?v={{ getVersion('manifest') }}">
+    <link rel="apple-touch-icon" href="{{ assetPath }}manifest/icons/icon-512x512.png?v={{ getVersion('manifest') }}"/>
+    <link rel="shortcut icon" href="{{ assetPath }}manifest/icons/icon-512x512.png?v={{ getVersion('manifest') }}" type="image/webp"/>
+    <link rel="shortcut icon" href="{{ assetPath }}manifest/icons/icon-48x48.png?v={{ getVersion('manifest') }}" type="image/x-icon"/>
+    <link rel="shortcut icon" href="{{ assetPath }}manifest/icons/icon-48x48.png?v={{ getVersion('manifest') }}" type="image/png"/>
+
+</head>
+<body>
+<!-- ***** Preloader Start ***** -->
+{% include 'layout/_partials/preloader.twig' %}
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header Area Start ***** -->
+{% include 'layout/_partials/header.twig' %}
+<!-- ***** Header Area End ***** -->
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="page-content" class="page-content">
+                {% block content %}
+                    <!-- content here will be overwritten -->
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<a id="hidden-click-element"
+   class="click"
+   href="index"
+   data-page="index" hidden>hidden click element</a>
+
+<!-- ***** Footer Area Start ***** -->
+{% include 'layout/_partials/footer.twig' %}
+<!-- ***** Footer Area End ***** -->
+
+<script>
+    window.foo = '{{ 'bar' }}';
+</script>
+<script type="application/javascript" src="/test.js"></script>
+
+</body>
+</html>

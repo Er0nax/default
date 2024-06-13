@@ -1,0 +1,16 @@
+RewriteEngine On
+
+# Rewrite /admin and its subdirectories to admin.php
+RewriteRule ^admin(/.*)?$ admin.php [L]
+
+# Check if the requested file does not exist
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Check if the requested directory does not exist
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Exclude requests for files with specific extensions
+RewriteCond %{REQUEST_URI} !\.[a-zA-Z0-9]{2,5}$
+
+# Redirect all other requests to index.php
+RewriteRule ^(.*)$ index.php [L]
