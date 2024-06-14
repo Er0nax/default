@@ -1,6 +1,6 @@
 <?php
 
-namespace modules\helpers;
+namespace src\helpers;
 
 /**
  * FileHelper

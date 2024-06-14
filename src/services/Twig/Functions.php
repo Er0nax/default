@@ -1,6 +1,6 @@
 <?php
 
-namespace modules\services\Twig;
+namespace src\services\Twig;
 
 /**
  * Functions that can be used inside a twig file.

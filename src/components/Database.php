@@ -1,9 +1,9 @@
 <?php
 
-namespace modules\components;
+namespace src\components;
 
 use Exception;
-use modules\helpers\FileHelper;
+use src\helpers\FileHelper;
 use PDO;
 
 /**

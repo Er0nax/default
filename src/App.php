@@ -1,10 +1,10 @@
 <?php
 
-namespace modules;
+namespace src;
 
-use modules\components\Database;
-use modules\components\Env;
-use modules\components\Router;
+use src\components\Database;
+use src\components\Env;
+use src\components\Router;
 
 // ini_set('display_errors', 'off');
 

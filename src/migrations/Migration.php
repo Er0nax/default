@@ -1,6 +1,6 @@
 <?php
 
-namespace modules\migrations;
+namespace src\migrations;
 
 /**
  * Migration start

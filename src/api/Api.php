@@ -1,6 +1,6 @@
 <?php
 
-namespace modules\api;
+namespace src\api;
 
 /**
  * Api start

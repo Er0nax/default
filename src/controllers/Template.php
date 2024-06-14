@@ -1,11 +1,11 @@
 <?php
 
-namespace modules\controllers;
+namespace src\controllers;
 
-use modules\Config;
-use modules\helpers\FileHelper;
-use modules\services\Twig\Extension;
-use modules\services\Twig\Functions;
+use src\Config;
+use src\helpers\FileHelper;
+use src\modules\main;
+use src\services\Twig\Extension;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -116,9 +116,34 @@ class Template
         $template = $twig->render($file, [
             'config' => Config::getConfig(),
             'page' => $this->page,
-            'params' => $this->params
+            'params' => $this->params,
+            'module' => $this->getModule(),
         ]);
 
         echo $template;
+    }
+
+    /**
+     * Returns the module for a page if exists or the main module.
+     * @return mixed|main
+     */
+    private function getModule(): mixed
+    {
+        $FileHelper = new FileHelper();
+
+        // check if page specific module exists
+        if ($FileHelper->exist('src/modules/' . $this->page . '.php')) {
+
+            // call class
+            $moduleClass = '\\src\\modules\\' . $this->page;
+
+            // Check if class exists
+            if (class_exists($moduleClass)) {
+                return new $moduleClass();
+            }
+        }
+
+        // return default main module
+        return new main();
     }
 }

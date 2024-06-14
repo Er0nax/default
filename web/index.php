@@ -2,7 +2,7 @@
 session_start();
 
 // Define path constants
-use modules\App;
+use src\App;
 
 define('BASE_PATH', dirname(__DIR__) . '/');
 define('VENDOR_PATH', BASE_PATH . '/vendor');

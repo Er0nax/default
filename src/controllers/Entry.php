@@ -1,6 +1,6 @@
 <?php
 
-namespace modules\controllers;
+namespace src\controllers;
 
 use PDO;
 use PDOException;

@@ -1,6 +1,6 @@
 <?php
 
-namespace modules;
+namespace src;
 
 /**
  * Project Config

@@ -1,9 +1,9 @@
 <?php
 
-namespace modules\components;
+namespace src\components;
 
-use modules\Config;
-use modules\helpers\FileHelper;
+use src\Config;
+use src\helpers\FileHelper;
 
 /**
  * Env component

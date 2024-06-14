@@ -1,12 +1,12 @@
 <?php
 
-namespace modules\components;
+namespace src\components;
 
-use modules\api\Api;
-use modules\Config;
-use modules\controllers\Template;
-use modules\helpers\ParseHelper;
-use modules\migrations\Migration;
+use src\api\Api;
+use src\Config;
+use src\controllers\Template;
+use src\helpers\ParseHelper;
+use src\migrations\Migration;
 
 /**
  * Router component
