@@ -10,7 +10,7 @@ use PDOStatement;
 /**
  * entry class
  */
-class Entry extends Controller
+class Entry extends Main
 {
     private ?string $tables = null;
     private ?string $columns = null;

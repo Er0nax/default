@@ -6,7 +6,7 @@ namespace src\controllers;
 /**
  * Main Controller with basic functions
  */
-class Controller
+class Main
 {
 
 }

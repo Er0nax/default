@@ -17,16 +17,13 @@ class Env
      */
     public function __construct()
     {
-        // new helper
-        $FileHelper = new FileHelper();
-
         // check if .env file exists
-        if (!$FileHelper->exist('.env')) {
+        if (!FileHelper::exist('.env')) {
             exit('Could not locate .env file!');
         }
 
         // get variables
-        $allVariables = parse_ini_file($FileHelper->get('.env'));
+        $allVariables = parse_ini_file(FileHelper::get('.env'));
         $this->envVariables = $this->getSafeVariables($allVariables);
 
         // put all env variables inside php's env

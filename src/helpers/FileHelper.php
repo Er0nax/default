@@ -12,7 +12,7 @@ class FileHelper
      * @param string $path + BASE_PATH will be added before.
      * @return bool
      */
-    public function exist(string $path): bool
+    public static function exist(string $path): bool
     {
         return file_exists(BASE_PATH . $path);
     }
@@ -22,7 +22,7 @@ class FileHelper
      * @param string $path
      * @return string
      */
-    public function get(string $path): string
+    public static function get(string $path): string
     {
         return BASE_PATH . $path;
     }

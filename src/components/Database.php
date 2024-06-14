@@ -20,16 +20,13 @@ class Database
      */
     public function __construct()
     {
-        // create new file helper
-        $this->FileHelper = new FileHelper();
-
         // env file given?
-        if (!$this->FileHelper->exist('.env')) {
+        if (!FileHelper::exist('.env')) {
             exit('Could not find the .env file!');
         }
 
         // parse env file
-        $this->envVariables = parse_ini_file($this->FileHelper->get('.env'));
+        $this->envVariables = parse_ini_file(FileHelper::get('.env'));
 
         $host = $this->getEnvVariable('DBHOST');
         $name = $this->getEnvVariable('DBNAME');

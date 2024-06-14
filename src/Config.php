@@ -30,7 +30,12 @@ class Config
                 'message' => 'contact',
                 'call' => 'api'
             ],
-            'usePreloader' => false
+            'usePreloader' => false,
+            'cacheDurations' => [ // in seconds
+                'default' => 10,
+                'html' => 10,
+                'json' => 120
+            ]
         ],
         'dev' => [
             'debugMode' => true,

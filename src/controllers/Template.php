@@ -3,8 +3,8 @@
 namespace src\controllers;
 
 use src\Config;
+use src\helpers\CacheHelper;
 use src\helpers\FileHelper;
-use src\modules\main;
 use src\services\Twig\Extension;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -16,7 +16,7 @@ use Twig\Loader\FilesystemLoader;
 /**
  * Template Controller
  */
-class Template
+class Template extends Main
 {
     private string $page = 'index';
     private array $params = [];
@@ -60,9 +60,8 @@ class Template
             return false;
         }
 
-        $FileHelper = new FileHelper();
         $templateFolder = Config::getConfig('folders')['templates'] ?? 'templates/';
-        return $FileHelper->exist($templateFolder . $file);
+        return FileHelper::exist($templateFolder . $file);
     }
 
     /**
@@ -84,6 +83,9 @@ class Template
      */
     public function renderTemplate(string $file = null): void
     {
+        // is cached?
+        $this->getTemplateFromCache();
+
         // check if custom file exists
         if (!$this->checkIfFileExists($file)) {
             // if not then show by page
@@ -98,7 +100,7 @@ class Template
         $loader = new FilesystemLoader($templateFolder);
         $twig = new Environment($loader, [
             'debug' => $debugMode,
-            'cache' => false,
+            'cache' => '../storage/cache',
         ]);
 
         // add debug extension
@@ -120,7 +122,46 @@ class Template
             'module' => $this->getModule(),
         ]);
 
+        // save in cache
+        $this->setTemplateToCache($template);
+
         echo $template;
+    }
+
+    /**
+     * Echos the cached template if exists.
+     * @return void
+     */
+    private function getTemplateFromCache(): void
+    {
+        if (Config::getConfig('cacheMode', false)) {
+            $arrayOfPageAndParams['page'] = $this->page;
+            $arrayOfPageAndParams['params'] = $this->params;
+
+            $template = CacheHelper::getCache($arrayOfPageAndParams);
+
+            if (!empty($template)) {
+                echo $template;
+                exit();
+            }
+        }
+    }
+
+    /**
+     * save the template in cache if cache mode enabled.
+     * @param string $page
+     * @param array $params
+     * @return void
+     */
+    private function setTemplateToCache(mixed $template): void
+    {
+        if (Config::getConfig('cacheMode', false)) {
+            $arrayOfPageAndParams['page'] = $this->page;
+            $arrayOfPageAndParams['params'] = $this->params;
+
+            $hash = CacheHelper::generateHash($arrayOfPageAndParams);
+            CacheHelper::setCache($template, $hash);
+        }
     }
 
     /**
@@ -129,10 +170,8 @@ class Template
      */
     private function getModule(): mixed
     {
-        $FileHelper = new FileHelper();
-
         // check if page specific module exists
-        if ($FileHelper->exist('src/modules/' . $this->page . '.php')) {
+        if (FileHelper::exist('src/modules/' . $this->page . '.php')) {
 
             // call class
             $moduleClass = '\\src\\modules\\' . $this->page;
@@ -144,6 +183,6 @@ class Template
         }
 
         // return default main module
-        return new main();
+        return new \src\modules\main();
     }
 }

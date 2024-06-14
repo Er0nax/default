@@ -13,10 +13,10 @@ class ParseHelper
      * @param string|null $regex
      * @return string
      */
-    public function escapeString(string $string, string $regex = null): string
+    public static function escapeString(string $string, string $regex = null): string
     {
         // Ersetzen der speziellen Wörter
-        foreach ($this->getDisabledWords() as $char => $replacement) {
+        foreach (self::getDisabledWords() as $char => $replacement) {
             $string = str_ireplace($char, $replacement, $string);
         }
 
@@ -32,7 +32,7 @@ class ParseHelper
     /**
      * @return string[] list of disallowed words
      */
-    private function getDisabledWords(): array
+    private static function getDisabledWords(): array
     {
         return [
             '<script>' => '',

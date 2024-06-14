@@ -4,7 +4,7 @@ session_start();
 // Define path constants
 use src\App;
 
-define('BASE_PATH', dirname(__DIR__) . '/');
+define('BASE_PATH', dirname(__DIR__) . '\\');
 define('VENDOR_PATH', BASE_PATH . '/vendor');
 define('ASSET_PATH', BASE_PATH . '/assets');
 
@@ -22,4 +22,3 @@ spl_autoload_register(function ($class_name) {
 // load and run flux
 $app = new App();
 $app->run();
-

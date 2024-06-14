@@ -143,11 +143,9 @@ class Router
      */
     private function getFullUrl(): string
     {
-        $ParseHelper = new ParseHelper();
-
         $http = (empty($_SERVER['HTTPS']) ? 'http' : 'https');
         $host = urldecode($_SERVER['HTTP_HOST']);
-        $reqs = $ParseHelper->escapeString(urldecode($_SERVER['REQUEST_URI']));
+        $reqs = ParseHelper::escapeString(urldecode($_SERVER['REQUEST_URI']));
 
         return urldecode($http . '://' . $host . $reqs);
     }
