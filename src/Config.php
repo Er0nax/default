@@ -21,7 +21,8 @@ class Config
             'folders' => [
                 'templates' => 'templates/', // default folder where twig files are saved
                 'error' => 'errors/', // folder inside templates folder, where error pages are saved
-                'pages' => 'pages/' // folder inside templates folder, where different pages are saved
+                'pages' => 'pages/', // folder inside templates folder, where different pages are saved
+                'cache' => '../storage/cache'
             ],
             'rewriteRoutes' => [ // rewrite a route with: from => to
                 'start' => 'index',
@@ -90,7 +91,7 @@ class Config
         }
 
         // add custom config variables
-        $config['enviroment'] = $environment;
+        $config['environment'] = $environment;
         $config['isLocal'] = (in_array($_SERVER['REMOTE_ADDR'], ['localhost', '127.0.0.1', '::1']));
 
         // cache allowed?

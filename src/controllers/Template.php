@@ -77,9 +77,6 @@ class Template extends Main
 
     /**
      * Renders a template.
-     * @throws RuntimeError
-     * @throws SyntaxError
-     * @throws LoaderError
      */
     public function renderTemplate(string $file = null): void
     {
@@ -96,11 +93,16 @@ class Template extends Main
         $debugMode = Config::getConfig('debugMode', false);
         $templateFolder = BASE_PATH . Config::getConfig('folders')['templates'] ?? 'templates/';
 
+        $cache = false;
+        if (Config::getConfig('cacheMode', false)) {
+            $cache = Config::getConfig('folders')['cache'] ?? '../storage/cache';
+        }
+
         // new loader + twig
         $loader = new FilesystemLoader($templateFolder);
         $twig = new Environment($loader, [
             'debug' => $debugMode,
-            'cache' => '../storage/cache',
+            'cache' => $cache,
         ]);
 
         // add debug extension
@@ -115,12 +117,16 @@ class Template extends Main
         // add globals
         $twig->addGlobal('session', $_SESSION);
 
-        $template = $twig->render($file, [
-            'config' => Config::getConfig(),
-            'page' => $this->page,
-            'params' => $this->params,
-            'module' => $this->getModule(),
-        ]);
+        try {
+            $template = $twig->render($file, [
+                'config' => Config::getConfig(),
+                'page' => $this->page,
+                'params' => $this->params,
+                'module' => $this->getModule(),
+            ]);
+        } catch (\Exception $e) {
+            exit('Could not create a new twig environment.');
+        }
 
         // save in cache
         $this->setTemplateToCache($template);
