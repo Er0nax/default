@@ -1,5 +1,5 @@
 vendor/*
 .idea/*
 storage/cache/*
-webpack/node_modules/*
+vite/node_modules/*
 web/assets/js/site.bundle.js
