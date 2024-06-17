@@ -72,13 +72,33 @@ CREATE TABLE IF NOT EXISTS `pages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `index` (`index`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle default.pages: ~2 rows (ungefähr)
+-- Exportiere Daten aus Tabelle default.pages: ~4 rows (ungefähr)
 DELETE FROM `pages`;
 INSERT INTO `pages` (`id`, `index`, `showAlways`, `hideInHeader`, `hideInFooter`, `mustBeLoggedIn`, `isRawPage`, `active`, `showPreloader`, `category`, `color`, `icon`, `name`, `title`, `headline`, `subline`, `updatedAt`, `createdAt`) VALUES
 	(1, 1, 'false', 'false', 'false', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'index', 'Home', '', '', '2024-06-17 11:49:14', '2024-06-17 11:49:14'),
-	(2, 99, 'false', 'true', 'true', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'error', 'Error', '', '', '2024-06-17 11:49:29', '2024-06-17 11:49:19');
+	(2, 99, 'false', 'true', 'true', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'error', 'Error', '', '', '2024-06-17 15:03:37', '2024-06-17 11:49:19'),
+	(3, 10, 'false', 'false', 'true', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'about', 'About', '', '', '2024-06-17 14:51:28', '2024-06-17 14:40:49'),
+	(4, 90, 'false', 'true', 'false', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'policy', 'Policy', '', '', '2024-06-17 14:55:51', '2024-06-17 14:55:46');
+
+-- Exportiere Struktur von Tabelle default.translations
+DROP TABLE IF EXISTS `translations`;
+CREATE TABLE IF NOT EXISTS `translations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `category` varchar(100) NOT NULL DEFAULT 'site',
+  `value` varchar(2000) NOT NULL DEFAULT '',
+  `de` varchar(2000) DEFAULT '',
+  `en` varchar(2000) DEFAULT '',
+  `active` enum('true','false') NOT NULL DEFAULT 'true',
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `value` (`value`) USING HASH
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Exportiere Daten aus Tabelle default.translations: ~0 rows (ungefähr)
+DELETE FROM `translations`;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
