@@ -93,6 +93,7 @@ class Config
         // add custom config variables
         $config['environment'] = $environment;
         $config['isLocal'] = (in_array($_SERVER['REMOTE_ADDR'], ['localhost', '127.0.0.1', '::1']));
+        $config['isLoggedin'] = !empty($_SESSION['user']['id']);
 
         // cache allowed?
         if ($config['cacheMode']) {

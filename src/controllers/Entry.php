@@ -5,6 +5,7 @@ namespace src\controllers;
 use PDO;
 use PDOException;
 use PDOStatement;
+use src\Config;
 
 
 /**
@@ -23,6 +24,7 @@ class Entry extends Main
     private bool $distinct = false;
     private bool $asJson = false;
     private bool $reversed = false;
+    private bool $cache = false;
     private PDO $con;
 
     /**
@@ -682,36 +684,36 @@ class Entry extends Main
     }
 
     /**
-     * @param $die
-     * @return string|null
+     * @param bool $die
+     * @return Entry
      */
-    public function dumpQuery($die = true): ?string
+    public function dumpQuery(bool $die = true): static
     {
-        if ($this->settings['debugMode']) {
+        if (Config::getConfig('debugMode', false)) {
             try {
                 $query = $this->buildQuery();
 
+                echo '<pre style="background-color: #fff; border: 3px solid #ddd; margin: 10px; padding: 5px;">';
+                var_dump($query);
+                echo '</pre>';
                 if ($die) {
-                    echo '<pre style="color: white; background: rgba(0, 0, 0, 0.5); padding: 10px;">';
-                    var_dump($query);
-                    echo '</pre>';
                     die();
-                } else {
-                    return $query;
                 }
 
             } catch (\Exception $e) {
-                return $e;
+                exit('Could not build query: ' . $e->getMessage());
             }
         }
 
-        return null;
+        return $this;
     }
 
     /**
      * @param string $table
      * @param array $keysAndValues
-     * @return bool
+     * @param bool $checkForExisting
+     * @param bool $dump
+     * @return bool|int
      */
     public function insert(string $table, array $keysAndValues, bool $checkForExisting = true, bool $dump = false): bool|int
     {
@@ -985,6 +987,18 @@ class Entry extends Main
     public function reversed(bool $reversed = true): static
     {
         $this->reversed = $reversed;
+
+        return $this;
+    }
+
+    /**
+     * Save the response in cache.
+     * @param bool $cache
+     * @return $this
+     */
+    public function cache(bool $cache = false): static
+    {
+        $this->cache = $cache;
 
         return $this;
     }

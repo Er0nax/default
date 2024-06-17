@@ -36,6 +36,8 @@ class Env
         if ($environment != 'production' && $environment != 'dev') {
             exit('Missing or invalid <b>ENVIRONMENT</b> in .env file!');
         }
+
+        $this->setErrorHandling();
     }
 
     /**
@@ -54,5 +56,14 @@ class Env
         }
 
         return $allVariables;
+    }
+
+    private function setErrorHandling(): void
+    {
+        $stage = getenv('ENVIRONMENT') ?? 'production';
+
+        if ($stage === 'production') {
+            ini_set('display_errors', 'off');
+        }
     }
 }

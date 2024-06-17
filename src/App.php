@@ -6,8 +6,6 @@ use src\components\Database;
 use src\components\Env;
 use src\components\Router;
 
-// ini_set('display_errors', 'off');
-
 /**
  * App
  */

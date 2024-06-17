@@ -2,6 +2,7 @@
 
 namespace src\services\Twig;
 
+use src\helpers\PageHelper;
 use src\modules\web\assets\SiteAssetBundle;
 
 /**
@@ -36,5 +37,32 @@ class Functions
     public function getSiteBundleVariables(): bool|string
     {
         return json_encode(SiteAssetBundle::getAll());
+    }
+
+    /**
+     * Dump and dies a value.
+     * @param mixed $data
+     * @param bool $die
+     * @return void
+     */
+    public function dump(mixed $data, bool $die = false): void
+    {
+        echo '<pre style="background-color: #fff; border: 3px solid #ddd; margin: 10px; padding: 5px;">';
+        var_dump($data);
+        echo '</pre>';
+
+        if ($die) {
+            exit();
+        }
+    }
+
+    /**
+     * Returns all pages by type.
+     * @param string $type
+     * @return array|bool|string
+     */
+    public function getPages(string $type = 'all'): bool|array|string
+    {
+        return PageHelper::getPages($type);
     }
 }

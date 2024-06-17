@@ -20,6 +20,7 @@ class Template extends Main
 {
     private string $page = 'index';
     private array $params = [];
+    private array $info = [];
 
     /**
      * Constructor
@@ -44,6 +45,11 @@ class Template extends Main
         // check if page exists in pages folder
         $fileByPage = $pagesFolder . $this->page . '.twig';
         if (!$this->checkIfFileExists($fileByPage)) {
+            return $this->getErrorPage('500');
+        }
+
+        // check if page exists in db
+        if (!$this->checkIfPageExistsInDB()) {
             return $this->getErrorPage('404');
         }
 
@@ -123,6 +129,7 @@ class Template extends Main
                 'page' => $this->page,
                 'params' => $this->params,
                 'module' => $this->getModule(),
+                'entry' => $this->getPageInfoFromDB()
             ]);
         } catch (\Exception $e) {
             exit('Could not create a new twig environment.');
@@ -192,8 +199,36 @@ class Template extends Main
         return new \src\modules\main();
     }
 
-    private function getPageInfo()
+    /**
+     * Returns the info about a page as array
+     * @return array|bool|string
+     */
+    private function getPageInfoFromDB(): bool|array|string
     {
         $entry = new Entry();
+        $entry->columns(['pages' => [
+            '*'
+        ]])->tables(['pages'])
+            ->where(['pages' => [
+                ['name', $this->page]
+            ]]);
+
+        return $entry->one();
+    }
+
+    /**
+     * @return bool|string
+     */
+    private function checkIfPageExistsInDB(): bool|string
+    {
+        $entry = new Entry();
+        $entry->columns(['pages' => ['id']])
+            ->tables(['pages'])
+            ->where(['pages' => [
+                ['name', $this->page],
+                ['active', true]
+            ]]);
+
+        return $entry->exists();
     }
 }
