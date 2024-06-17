@@ -26,9 +26,6 @@
 
     <title>{{ page }} | {{ getEnv('TITLE') }}</title>
 
-    <!-- CSS Files -->
-    <link type="text/css" rel="stylesheet" href="test.css">
-
     <!-- Manifest -->
     <link rel="manifest" href="{{ assetPath }}manifest/manifest.webmanifest?v={{ getVersion('manifest') }}">
     <link rel="apple-touch-icon" href="{{ assetPath }}manifest/icons/icon-512x512.png?v={{ getVersion('manifest') }}"/>
@@ -70,7 +67,7 @@
 <script>
     window.foo = '{{ 'bar' }}';
 </script>
-<script type="application/javascript" src="/test.js"></script>
+<script type="application/javascript" src="{{ getEnv('ASSET_URL') ~ 'js/site.bundle.js' }}"></script>
 
 </body>
 </html>
