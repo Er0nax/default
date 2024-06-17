@@ -34,16 +34,22 @@ class PageHelper
         $entry->addWhere(['pages' => [['active', true]]]);
 
         $pages = $entry->all();
-        $isLoggedIn = Config::getConfig('isLoggedin', false);
+        $isLoggedIn = Config::getConfig('isLoggedIn', false);
 
         // go through settings
         foreach ($pages as $key => $page) {
 
             // must be logged in?
-            if ($page['mustBeLoggedIn']) {
-
+            if ($page['mustBeLoggedIn'] === true) {
                 if (!$isLoggedIn) {
                     unset($pages[$key]);
+                }
+            }
+
+            // must not be logged in?
+            if ($page['mustBeLoggedIn'] === false) {
+                if ($isLoggedIn) {
+                    unset($page[$key]);
                 }
             }
         }

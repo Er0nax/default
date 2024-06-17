@@ -1,11 +1,13 @@
-import '../dist/scss/styles.scss'
-import '../dist/css/style.css'
-
-import * as aos from '@/services/Aos';
+import * as swapper from '@/services/Swapper';
+//import '../dist/scss/styles.scss'
+//import '../dist/css/style.css'
 
 function init() {
+    // start swapper
+    swapper.init();
+
     // init all aos
-    aos.init();
+    console.log('vite initialized.');
 }
 
 // noinspection JSIgnoredPromiseFromCall
