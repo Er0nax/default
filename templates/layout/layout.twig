@@ -65,9 +65,10 @@
 <!-- ***** Footer Area End ***** -->
 
 <script>
-    window.foo = '{{ 'bar' }}';
+    window.Site = {{ getSiteBundleVariables()|raw }}
 </script>
-<script type="application/javascript" src="{{ getEnv('ASSET_URL') ~ 'js/site.bundle.js' }}"></script>
+
+<script type="application/javascript" src="{{ getEnv('ASSET_URL') ~ 'js/site.umd.js' }}"></script>
 
 </body>
 </html>
