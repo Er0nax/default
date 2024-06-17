@@ -26,6 +26,9 @@
 
     <title>{{ page }} | {{ getEnv('TITLE') }}</title>
 
+    <!-- css -->
+    <link href="{{ getEnv('ASSET_URL') ~ 'js/style.css' }}" rel="stylesheet">
+
     <!-- Manifest -->
     <link rel="manifest" href="{{ assetPath }}manifest/manifest.webmanifest?v={{ getVersion('manifest') }}">
     <link rel="apple-touch-icon" href="{{ assetPath }}manifest/icons/icon-512x512.png?v={{ getVersion('manifest') }}"/>
@@ -35,30 +38,30 @@
 
 </head>
 <body>
-<!-- ***** Preloader Start ***** -->
-{% include 'layout/_partials/preloader.twig' %}
-<!-- ***** Preloader End ***** -->
-
 <!-- ***** Header Area Start ***** -->
 {% include 'layout/_partials/header.twig' %}
 <!-- ***** Header Area End ***** -->
 
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <div id="page-content" class="page-content">
-                {% block content %}
-                    <!-- content here will be overwritten -->
-                {% endblock %}
-            </div>
-        </div>
+<!-- ***** Preloader Start ***** -->
+{% include 'layout/_partials/hero.twig' %}
+<!-- ***** Preloader End ***** -->
+
+<main id="main">
+    <div id="page-content" class="page-content">
+        {% block content %}
+            <!-- content here will be overwritten -->
+        {% endblock %}
     </div>
-</div>
+</main>
 
 <a id="hidden-click-element"
    class="click"
    href="index"
    data-page="index" hidden>hidden click element</a>
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+</a>
 
 <!-- ***** Footer Area Start ***** -->
 {% include 'layout/_partials/footer.twig' %}
@@ -68,7 +71,7 @@
     window.Site = {{ getSiteBundleVariables()|raw }}
 </script>
 
-<script type="application/javascript" src="{{ getEnv('ASSET_URL') ~ 'js/site.umd.js' }}"></script>
+<script type="module" src="{{ getEnv('ASSET_URL') ~ 'js/site.umd.js' }}"></script>
 
 </body>
 </html>

@@ -9,17 +9,31 @@ use src\modules\web\assets\SiteAssetBundle;
  */
 class Functions
 {
-    public function getEnv(string $key)
+    /**
+     * Returns an env variable or false if it does not exist.
+     * @param string $key
+     * @return string|array|bool
+     */
+    public function getEnv(string $key): string|array|bool
     {
         return getenv($key);
     }
 
-    public function getVersion(string $type = 'css')
+    /**
+     * Returns the current version for a type
+     * @param string $type
+     * @return string
+     */
+    public function getVersion(string $type = 'css'): string
     {
-        return $type;
+        return 'v.1.0.0';
     }
 
-    public function getSiteBundleVariables()
+    /**
+     * Returns the site asset bundle data as json
+     * @return false|string
+     */
+    public function getSiteBundleVariables(): bool|string
     {
         return json_encode(SiteAssetBundle::getAll());
     }

@@ -1,7 +1,11 @@
-import foo from '@/services/Utils';
+import '../dist/scss/styles.scss'
+import '../dist/css/style.css'
 
-async function init() {
-    foo();
+import * as aos from '@/services/Aos';
+
+function init() {
+    // init all aos
+    aos.init();
 }
 
 // noinspection JSIgnoredPromiseFromCall

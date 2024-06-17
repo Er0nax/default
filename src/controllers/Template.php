@@ -191,4 +191,9 @@ class Template extends Main
         // return default main module
         return new \src\modules\main();
     }
+
+    private function getPageInfo()
+    {
+        $entry = new Entry();
+    }
 }
