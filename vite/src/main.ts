@@ -1,14 +1,10 @@
-import * as swapper from '@/services/Swapper';
-//import '../dist/scss/styles.scss'
-//import '../dist/css/style.css'
+import Swapper from "@/services/Swapper";
 
-function init() {
-    // start swapper
-    swapper.init();
-
-    // init all aos
-    console.log('vite initialized.');
+class Main {
+    constructor() {
+        // start the swapper.
+        Swapper.start();
+    }
 }
 
-// noinspection JSIgnoredPromiseFromCall
-init();
+const main = new Main();

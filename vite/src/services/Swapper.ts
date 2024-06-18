@@ -1,9 +1,26 @@
-import t from '@/helpers/translation';
-import SiteModule from '@/services/SiteModule';
+import HtmlHelper from "@/helpers/HtmlHelper";
+import EventHelper from "@/helpers/EventHelper";
 
-export function init() {
+class Swapper {
+    anchors: HTMLElement[];
 
-    console.log(SiteModule);
+    /**
+     * Constructor
+     */
+    constructor() {
+        this.anchors = HtmlHelper.getAnchors(true);
+    }
 
-    return t('Hello World');
+    /**
+     * Start the swapper.
+     */
+    start() {
+        // loop through all anchors
+        this.anchors.forEach((anchor: HTMLElement) => {
+            // add event listeners
+            EventHelper.addClickEvent(anchor);
+        })
+    }
 }
+
+export default new Swapper();

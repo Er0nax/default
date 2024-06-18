@@ -4,4 +4,10 @@ export interface Site {
     lang: string;
     environment: string;
     loggedIn: boolean;
+    useBootstrap: boolean;
+    swapper: Swapper;
+}
+
+export interface Swapper {
+    attribute: string;
 }

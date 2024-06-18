@@ -36,6 +36,9 @@ class Config
                 'default' => 10,
                 'html' => 10,
                 'json' => 120
+            ],
+            'swapper' => [
+                'attribute' => 'page'
             ]
         ],
         'dev' => [
@@ -72,11 +75,14 @@ class Config
             return $configFromCache;
         }
 
+        // add global config
+        $config = self::$config['*'];
+
         // loop through scopes
         foreach (self::$config as $scope => $content) {
 
             // add global scope and environment scope
-            if ($scope == '*' || $scope == $environment) {
+            if ($scope == $environment) {
                 // content of scope is array?
                 if (is_array($content)) {
 

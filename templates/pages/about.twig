@@ -1,3 +1,9 @@
 {% block content %}
     {{ dump(entry) }}
+
+    <a href="index">Test without click class.</a>
+    <a class="click">Tet wihout href</a>
+    <a class="click" href="meetings" data-page="meetings">meetings</a>
+    <a class="click" href="meetings/simsontreffen-flurstedt" data-page="meetings/simsontreffen-flurstedt">treffen flursted</a>
+    <a class="click" href="test/abc/123/yes" data-page="test/abc/123/yes"></a>
 {% endblock %}
