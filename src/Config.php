@@ -38,12 +38,19 @@ class Config
                 'json' => 120
             ],
             'swapper' => [
-                'attribute' => 'page'
+                'clickAttribute' => 'page'
+            ],
+            'api' => [
+                'cache' => true,
+                'duration' => 60
             ]
         ],
         'dev' => [
             'debugMode' => true,
             'cacheMode' => false,
+            'api' => [
+                'cache' => false
+            ]
         ],
         'production' => [
             'debugMode' => false,
@@ -79,22 +86,14 @@ class Config
         $config = self::$config['*'];
 
         // loop through scopes
-        foreach (self::$config as $scope => $content) {
-
-            // add global scope and environment scope
-            if ($scope == $environment) {
-                // content of scope is array?
-                if (is_array($content)) {
-
-                    // loop through content
-                    foreach ($content as $key => $value) {
-
-                        // add to result
-                        $config[$key] = $value;
-                    }
-                }
+        foreach (self::$config[$environment] ?? [] as $key => $value) {
+            if (is_array($value) && isset($config[$key]) && is_array($config[$key])) {
+                $config[$key] = array_replace_recursive($config[$key], $value);
+            } else {
+                $config[$key] = $value;
             }
         }
+
 
         // add custom config variables
         $config['environment'] = $environment;

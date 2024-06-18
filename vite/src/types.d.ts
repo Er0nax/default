@@ -9,5 +9,11 @@ export interface Site {
 }
 
 export interface Swapper {
-    attribute: string;
+    clickAttribute: string;
+}
+
+interface SwClickEventDetails extends Event {
+    detail: {
+        [key: string]: any;
+    }
 }

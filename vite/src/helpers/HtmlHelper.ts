@@ -1,5 +1,6 @@
 import SiteModule from '@/shared/SiteModule';
 import log from "@/helpers/LogHelper";
+import {SwClickEventDetails} from "@/types";
 
 class HtmlHelper {
     clickAttribute: string;
@@ -7,7 +8,7 @@ class HtmlHelper {
 
     constructor() {
         if (!SiteModule.swapper.clickAttribute) {
-            log('Could not find any attribute for the swapper!', 'throw');
+            log('Could not find any click attribute!', 'throw');
         }
 
         this.clickAttribute = SiteModule.swapper.clickAttribute;
@@ -20,18 +21,18 @@ class HtmlHelper {
      */
     public getAnchors(checkOtherAnchors = true): HTMLElement[] {
         // create arrays
-        const withAttribute: HTMLElement[] = [];
-        const withoutAttribute: HTMLElement[] = [];
+        const withClickAttribute: HTMLElement[] = [];
+        const withoutClickAttribute: HTMLElement[] = [];
         const withoutHref: HTMLElement[] = [];
 
         // loop through all anchors
         this.anchors.forEach((anchor: Element) => {
-            if (anchor.hasAttribute(this.clickAttribute)) {
+            if (anchor.hasAttribute(`data-${this.clickAttribute}`)) {
                 // anchor has click class
-                withAttribute.push(anchor as HTMLElement);
+                withClickAttribute.push(anchor as HTMLElement);
             } else {
                 // anchor does not have click class
-                withoutAttribute.push(anchor as HTMLElement);
+                withoutClickAttribute.push(anchor as HTMLElement);
             }
 
             // does have href?
@@ -42,18 +43,18 @@ class HtmlHelper {
 
         // should check other anchors?
         if (checkOtherAnchors) {
-            this._checkOtherAnchors(withoutAttribute, withoutHref);
+            this._checkOtherAnchors(withoutClickAttribute, withoutHref);
         }
 
         // return only anchors with click
-        return withAttribute;
+        return withClickAttribute;
     }
 
     /**
      * Returns object of all data-attributes from an element.
      * @param element
      */
-    public getDetailsFromElement(element: HTMLElement): { [key: string]: any } {
+    public getDetailsFromElement(element: HTMLElement): SwClickEventDetails {
         const dataAttributes: { [key: string]: any } = {};
 
         // loop through data-attributes
@@ -71,7 +72,7 @@ class HtmlHelper {
             }
         }
 
-        return dataAttributes;
+        return dataAttributes as SwClickEventDetails;
     }
 
     /**
@@ -100,22 +101,22 @@ class HtmlHelper {
 
     /**
      * Logs anchors without clickclass and without href if existed.
-     * @param withoutAttribute
+     * @param withoutClickAttribute
      * @param withoutHref
      * @private
      */
-    private _checkOtherAnchors(withoutAttribute: HTMLElement[], withoutHref: HTMLElement[]) {
+    private _checkOtherAnchors(withoutClickAttribute: HTMLElement[], withoutHref: HTMLElement[]) {
 
         // without click class found?
-        if (withoutAttribute.length !== 0) {
+        if (withoutClickAttribute.length !== 0) {
             log('Found anchors without click attribute!', 'warn');
-            console.log(withoutAttribute);
+            log(withoutClickAttribute, 'warn');
         }
 
         // without href?
         if (withoutHref.length !== 0) {
             log('Found anchors without href!', 'warn');
-            console.log(withoutHref);
+            log(withoutHref, 'warn');
         }
     }
 }

@@ -1,14 +1,30 @@
 import HtmlHelper from "@/helpers/HtmlHelper";
+import log from "@/helpers/LogHelper";
+import {SwClickEventDetails} from "@/types";
 
 class EventHelper {
+
     constructor() {
-        console.log('new event helper');
+        log('new event helper');
     }
 
+    /**
+     * Add a custom click event for each data-page click.
+     * @param element
+     */
     addClickEvent(element: HTMLElement) {
-        const details = HtmlHelper.getDetailsFromElement(element);
+        const details: SwClickEventDetails = HtmlHelper.getDetailsFromElement(element);
 
-        console.log(details);
+        element.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            document.dispatchEvent(new CustomEvent("swclick", {
+                detail: details,
+                bubbles: true,
+                cancelable: true,
+                composed: false,
+            }));
+        })
     }
 }
 

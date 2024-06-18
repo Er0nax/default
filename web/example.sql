@@ -15,7 +15,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 -- Exportiere Struktur von Tabelle default.api_tokens
-DROP TABLE IF EXISTS `api_tokens`;
 CREATE TABLE IF NOT EXISTS `api_tokens` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ip` varchar(255) CHARACTER SET utf8 NOT NULL,
@@ -33,7 +32,6 @@ INSERT INTO `api_tokens` (`id`, `ip`, `token`, `uses`, `active`, `created_at`, `
 	(1, '127.0.0.1', 'ipeuz9GLH2mKwid7OD81HEopwQaKy9', 0, 'true', '2024-06-17 11:50:12', '2024-06-17 11:50:12');
 
 -- Exportiere Struktur von Tabelle default.api_whitelist
-DROP TABLE IF EXISTS `api_whitelist`;
 CREATE TABLE IF NOT EXISTS `api_whitelist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ip` varchar(255) NOT NULL,
@@ -49,7 +47,6 @@ INSERT INTO `api_whitelist` (`id`, `ip`, `active`, `updated_at`, `created_at`) V
 	(1, '127.0.0.1', 'true', '2024-06-17 11:50:00', '2024-06-17 11:50:00');
 
 -- Exportiere Struktur von Tabelle default.pages
-DROP TABLE IF EXISTS `pages`;
 CREATE TABLE IF NOT EXISTS `pages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `index` int(11) NOT NULL DEFAULT 0,
@@ -77,13 +74,12 @@ CREATE TABLE IF NOT EXISTS `pages` (
 -- Exportiere Daten aus Tabelle default.pages: ~4 rows (ungefähr)
 DELETE FROM `pages`;
 INSERT INTO `pages` (`id`, `index`, `showAlways`, `hideInHeader`, `hideInFooter`, `mustBeLoggedIn`, `isRawPage`, `active`, `showPreloader`, `category`, `color`, `icon`, `name`, `title`, `headline`, `subline`, `updatedAt`, `createdAt`) VALUES
-	(1, 1, 'false', 'false', 'false', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'index', 'Home', '', '', '2024-06-17 11:49:14', '2024-06-17 11:49:14'),
-	(2, 99, 'false', 'true', 'true', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'error', 'Error', '', '', '2024-06-17 15:03:37', '2024-06-17 11:49:19'),
-	(3, 10, 'false', 'false', 'true', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'about', 'About', '', '', '2024-06-17 14:51:28', '2024-06-17 14:40:49'),
-	(4, 90, 'false', 'true', 'false', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'policy', 'Policy', '', '', '2024-06-17 14:55:51', '2024-06-17 14:55:46');
+	(1, 1, 'false', 'false', 'false', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'index', 'Home', 'Welcome.', '', '2024-06-18 14:10:50', '2024-06-17 11:49:14'),
+	(2, 99, 'false', 'true', 'true', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'error', 'Error', 'There was an error.', '', '2024-06-18 14:10:56', '2024-06-17 11:49:19'),
+	(3, 10, 'false', 'false', 'true', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'about', 'About', 'What are we doing?', '', '2024-06-18 14:11:05', '2024-06-17 14:40:49'),
+	(4, 90, 'false', 'true', 'false', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'policy', 'Policy', 'Read the policy.', '', '2024-06-18 14:11:13', '2024-06-17 14:55:46');
 
 -- Exportiere Struktur von Tabelle default.translations
-DROP TABLE IF EXISTS `translations`;
 CREATE TABLE IF NOT EXISTS `translations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `category` varchar(100) NOT NULL DEFAULT 'site',

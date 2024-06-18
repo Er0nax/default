@@ -15,6 +15,8 @@ class SwapperController extends MainController
 
     public function actionGetContent()
     {
-        $this->render($this->params);
+        $this->render('hi!', 200, [
+            'cache' => true
+        ]);
     }
 }
