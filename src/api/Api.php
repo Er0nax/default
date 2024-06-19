@@ -3,6 +3,8 @@
 namespace src\api;
 
 use src\api\controllers\MainController;
+use src\Config;
+use src\helpers\CacheHelper;
 use src\helpers\FileHelper;
 use src\helpers\ParseHelper;
 
@@ -48,6 +50,17 @@ class Api extends MainController
         // remove first and second key from params as they are just the controller and action...
         array_shift($this->params);
         array_shift($this->params);
+
+        // api can be cached?
+        if (Config::getConfig('api')['cache']) {
+            // check if there is cached content with hash of params
+            $cachedResponse = CacheHelper::getCache($this->params);
+            if (!empty($cachedResponse)) {
+                $this->render($cachedResponse, 200, [
+                    'cached' => true
+                ]);
+            }
+        }
 
         // check for controller (class)
         if (!$this->checkIfControllerExists()) {

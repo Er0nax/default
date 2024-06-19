@@ -91,6 +91,13 @@ class Router
             array_shift($requests);
         }
 
+        foreach ($requests as $key => $value) {
+            if (ParseHelper::isJson($value)) {
+                // Convert the JSON string to a PHP array
+                $requests[$key] = json_decode($value, true);
+            }
+        }
+
         return $requests;
     }
 
@@ -134,7 +141,7 @@ class Router
         $requests = array_values($requests);
 
         // Merge with $_GET parameters
-        return array_merge($requests, $_GET);
+        return array_merge($requests, $_GET, $_POST);
     }
 
     /**

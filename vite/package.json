@@ -2,24 +2,19 @@
   "name": "vite",
   "private": true,
   "version": "0.0.0",
-  "module": "esnext",
+  "type": "module",
   "scripts": {
     "serve": "vite",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
-  "dependencies": {
-    "@popperjs/core": "^2.11.8",
-    "@types/aos": "^3.0.7",
-    "@types/node": "^20.14.2",
-    "aos": "^2.3.4",
-    "axios": "^1.7.2",
-    "bootstrap": "^5.3.3",
-    "chart.js": "^4.4.3",
-    "swiper": "^11.1.4",
+  "devDependencies": {
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
   },
-  "devDependencies": {
-    "sass": "^1.77.5"
+  "dependencies": {
+    "@types/node": "^20.14.5",
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "vite-plugin-checker": "^0.6.4"
   }
 }

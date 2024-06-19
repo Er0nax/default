@@ -12,7 +12,7 @@ class SiteAssetBundle
     /**
      * @return array
      */
-    public static function getAll(): array
+    public static function getAll(array $entry): array
     {
         return [
             'baseUrl' => getenv('BASE_URL') ?? null,
@@ -22,6 +22,7 @@ class SiteAssetBundle
             'loggedIn' => Config::getConfig('isLoggedIn', false),
             'useBootstrap' => Config::getConfig('useBootstrap', false),
             'swapper' => Config::getConfig('swapper', []),
+            'entry' => $entry
         ];
     }
 }

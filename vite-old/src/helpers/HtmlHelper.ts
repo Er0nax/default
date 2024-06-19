@@ -4,7 +4,7 @@ import {SwClickEventDetails} from "@/types";
 
 class HtmlHelper {
     clickAttribute: string;
-    anchors: NodeListOf<Element>;
+    anchors: NodeListOf<Element> | [];
 
     constructor() {
         if (!SiteModule.swapper.clickAttribute) {
@@ -17,16 +17,21 @@ class HtmlHelper {
 
     /**
      * Returning all anchors with click class as HTMLElement[]
-     * @param checkOtherAnchors
+     * @param container
      */
-    public getAnchors(checkOtherAnchors = true): HTMLElement[] {
+    public getAnchors(container: HTMLElement | null = null): HTMLElement[] {
+        const anchors = this._getAllAnchors(container);
+        return this._getFilteredAnchors(anchors);
+    }
+
+    private _getFilteredAnchors(anchors: NodeListOf<Element>, checkOtherAnchors: boolean = false) {
         // create arrays
         const withClickAttribute: HTMLElement[] = [];
         const withoutClickAttribute: HTMLElement[] = [];
         const withoutHref: HTMLElement[] = [];
 
         // loop through all anchors
-        this.anchors.forEach((anchor: Element) => {
+        anchors.forEach((anchor: Element) => {
             if (anchor.hasAttribute(`data-${this.clickAttribute}`)) {
                 // anchor has click class
                 withClickAttribute.push(anchor as HTMLElement);
@@ -76,6 +81,23 @@ class HtmlHelper {
     }
 
     /**
+     * Returns the container as a htmlelement.
+     */
+    public getContainer(): HTMLElement {
+        const containerID = SiteModule.swapper.containerID;
+        if (!containerID) {
+            log('Could not find any containerID', 'throw');
+        }
+
+        const container = document.getElementById(containerID);
+        if (!container) {
+            log(`Could not find any container with ID: "${containerID}"`, 'throw');
+        }
+
+        return container as HTMLElement;
+    }
+
+    /**
      * parses a string by /
      * @param attribute
      * @private
@@ -95,7 +117,11 @@ class HtmlHelper {
      * Returning all anchors as NodeListOf<Element>
      * @private
      */
-    private _getAllAnchors(): NodeListOf<Element> {
+    private _getAllAnchors(container: HTMLElement | null = null): NodeListOf<Element> {
+        if (container) {
+            return container.querySelectorAll('a');
+        }
+
         return document.querySelectorAll('a');
     }
 

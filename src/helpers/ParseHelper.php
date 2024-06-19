@@ -45,4 +45,17 @@ class ParseHelper
             'OFFSET' => '',
         ];
     }
+
+    /**
+     * Returns boolean whether a given value is json or not.
+     * @param mixed $data
+     * @return bool
+     */
+    public static function isJson(mixed $data): bool
+    {
+        // Decodes the JSON string, while suppressing errors
+        json_decode($data);
+        // Returns true if the JSON string was decoded correctly
+        return (json_last_error() == JSON_ERROR_NONE);
+    }
 }

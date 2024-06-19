@@ -12,9 +12,10 @@ class Extension extends AbstractExtension
 {
     private Functions $functions;
 
-    public function __construct()
+    public function __construct(array $entry)
     {
         $this->functions = new Functions();
+        $this->functions->entry = $entry;
     }
 
     public function getFunctions(): array

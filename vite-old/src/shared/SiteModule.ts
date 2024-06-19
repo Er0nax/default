@@ -1,4 +1,4 @@
-import {Entry, Site, Swapper} from '@/types';
+import {Site, Swapper} from '@/types';
 
 class SiteModule {
     baseUrl: string;
@@ -8,7 +8,6 @@ class SiteModule {
     loggedIn: boolean;
     useBootstrap: boolean;
     swapper: Swapper;
-    entry: Entry
 
     /**
      * get variables from siteassetbundle and make them global.
@@ -22,7 +21,6 @@ class SiteModule {
         this.loggedIn = config.loggedIn;
         this.useBootstrap = config.useBootstrap;
         this.swapper = config.swapper;
-        this.entry = config.entry;
     }
 }
 

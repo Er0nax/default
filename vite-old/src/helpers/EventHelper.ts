@@ -5,7 +5,7 @@ import {SwClickEventDetails} from "@/types";
 class EventHelper {
 
     constructor() {
-        log('new event helper');
+        //log('new event helper');
     }
 
     /**

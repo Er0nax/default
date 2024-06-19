@@ -37,23 +37,29 @@ class Template extends Main
      * Returns the file given by this->page
      * @return string
      */
-    private function getPageFile(): string
+    private function getPageFile(bool $isApi = false): string
     {
         // get pages folder from config
         $pagesFolder = Config::getConfig('folders')['pages'] ?? 'pages/';
 
         // check if page exists in pages folder
         $fileByPage = $pagesFolder . $this->page . '.twig';
-        if (!$this->checkIfFileExists($fileByPage)) {
-            return $this->getErrorPage('500');
-        }
 
         // check if page exists in db
         if (!$this->checkIfPageExistsInDB()) {
-            return $this->getErrorPage('404');
+            return $this->getErrorPage('404', $isApi);
         }
 
-        return 'layout/site.twig';
+        // check if file exists locally
+        if (!$this->checkIfFileExists($fileByPage)) {
+            return $this->getErrorPage('500', $isApi);
+        }
+
+        if ($isApi) {
+            return $pagesFolder . $this->page . '.twig';
+        } else {
+            return 'layout/site.twig';
+        }
     }
 
     /**
@@ -73,12 +79,19 @@ class Template extends Main
     /**
      * Returns the error page given by the type
      * @param string $type
+     * @param bool $isApi
      * @return string
      */
-    private function getErrorPage(string $type): string
+    private function getErrorPage(string $type, bool $isApi = false): string
     {
+        $this->page = $type;
         $errorFolder = Config::getConfig('folders')['error'] ?? 'errors/';
-        return $errorFolder . $type . '.twig';
+
+        if ($isApi) {
+            return $errorFolder . $type . '.twig';
+        }
+
+        return $errorFolder . '_entry.twig';
     }
 
     /**
@@ -95,6 +108,68 @@ class Template extends Main
             $file = $this->getPageFile();
         }
 
+        $entry = $this->getPageEntryInfoFromDB();
+        $twig = $this->getNewTwig($entry);
+
+        try {
+            $template = $twig->render($file, [
+                'config' => Config::getConfig(),
+                'page' => $this->page,
+                'params' => $this->params,
+                'module' => $this->getModule(),
+                'entry' => $entry,
+                'isApi' => false,
+            ]);
+        } catch (\Exception $e) {
+            exit('Could not create a new twig environment.');
+        }
+
+        // save in cache
+        $this->setTemplateToCache($template);
+
+        echo $template;
+    }
+
+    /**
+     * Returns the content for the api.
+     * @return array
+     */
+    public function renderApiTemplate(): array
+    {
+        $file = $this->getPageFile(true);
+
+        $entry = $this->getPageEntryInfoFromDB();
+        $twig = $this->getNewTwig($entry);
+
+        try {
+            $template = $twig->render($file, [
+                'config' => Config::getConfig(),
+                'page' => $this->page,
+                'params' => $this->params,
+                'module' => $this->getModule(),
+                'entry' => $entry,
+                'isApi' => true,
+            ]);
+        } catch (\Exception $e) {
+            return [
+                'status' => 500,
+                'content' => 'Could not create a new twig environment.',
+                'msg' => $e->getMessage()
+            ];
+        }
+
+        // return the template
+        return [
+            'status' => 200,
+            'content' => $template,
+        ];
+    }
+
+    /**
+     * @return Environment
+     */
+    private function getNewTwig(array $entry): Environment
+    {
         // get debug mode
         $debugMode = Config::getConfig('debugMode', false);
         $templateFolder = BASE_PATH . Config::getConfig('folders')['templates'] ?? 'templates/';
@@ -117,28 +192,13 @@ class Template extends Main
         }
 
         // add custom twig functions
-        $TwigFunctions = new Extension();
+        $TwigFunctions = new Extension($entry);
         $twig->addExtension($TwigFunctions);
 
         // add globals
         $twig->addGlobal('session', $_SESSION);
 
-        try {
-            $template = $twig->render($file, [
-                'config' => Config::getConfig(),
-                'page' => $this->page,
-                'params' => $this->params,
-                'module' => $this->getModule(),
-                'entry' => $this->getPageInfoFromDB()
-            ]);
-        } catch (\Exception $e) {
-            exit('Could not create a new twig environment.');
-        }
-
-        // save in cache
-        $this->setTemplateToCache($template);
-
-        echo $template;
+        return $twig;
     }
 
     /**
@@ -203,7 +263,7 @@ class Template extends Main
      * Returns the info about a page as array
      * @return array|bool|string
      */
-    private function getPageInfoFromDB(): bool|array|string
+    private function getPageEntryInfoFromDB(): bool|array|string
     {
         $entry = new Entry();
         $entry->columns(['pages' => [
@@ -213,7 +273,12 @@ class Template extends Main
                 ['name', $this->page]
             ]]);
 
-        return $entry->one();
+        $page = $entry->one();
+
+        // add params
+        $page['params'] = $this->params;
+
+        return $page;
     }
 
     /**

@@ -115,6 +115,27 @@ class CacheHelper
     }
 
     /**
+     * @param mixed $data
+     * @param string|null $hash
+     * @return mixed|null
+     */
+    public static function getCacheAliveTime(mixed $data, string $hash = null): mixed
+    {
+        // hash not given? => generate by data
+        if (empty($hash)) {
+            $hash = self::generateHash($data);
+        }
+
+        // cache given?
+        if (isset($_SESSION['cache'][$hash]['data'])) {
+            // return the data
+            return $_SESSION['cache'][$hash]['maxTime'];
+        }
+
+        return null;
+    }
+
+    /**
      * Returns string whether the given data is html, json or unknown.
      * @param mixed $data
      * @return string

@@ -38,11 +38,13 @@ class Config
                 'json' => 120
             ],
             'swapper' => [
-                'clickAttribute' => 'page'
+                'attributeName' => 'page',
+                'containerId' => 'page-content'
             ],
             'api' => [
                 'cache' => true,
-                'duration' => 60
+                'duration' => 60,
+                'translate' => false
             ]
         ],
         'dev' => [

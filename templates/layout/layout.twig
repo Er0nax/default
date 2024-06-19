@@ -46,11 +46,11 @@
 {% include 'layout/_partials/hero.twig' %}
 <!-- ***** Preloader End ***** -->
 
-    <div id="page-content" class="page-content">
-        {% block content %}
-            <!-- content here will be overwritten -->
-        {% endblock %}
-    </div>
+<div id="page-content" class="page-content">
+    {% block content %}
+        <!-- content here will be overwritten -->
+    {% endblock %}
+</div>
 
 <a id="hidden-click-element"
    class="click"
@@ -65,7 +65,15 @@
     window.Site = {{ getSiteBundleVariables()|raw }}
 </script>
 
-<script type="module" src="{{ getEnv('ASSET_URL') ~ 'js/site.umd.js' }}"></script>
+<script type="module">
+    import {inject} from "https://127.0.0.1:5173/@vite-plugin-checker-runtime";
+
+    inject({
+        overlayConfig: {},
+        base: "/",
+    });
+</script>
+<script type="text/javascript" src="{{ getEnv('ASSET_URL') ~ 'js/site.umd.cjs' }}"></script>
 
 </body>
 </html>

@@ -10,6 +10,8 @@ use src\modules\web\assets\SiteAssetBundle;
  */
 class Functions
 {
+    public array $entry = [];
+
     /**
      * Returns an env variable or false if it does not exist.
      * @param string $key
@@ -36,7 +38,7 @@ class Functions
      */
     public function getSiteBundleVariables(): bool|string
     {
-        return json_encode(SiteAssetBundle::getAll());
+        return json_encode(SiteAssetBundle::getAll($this->entry));
     }
 
     /**
