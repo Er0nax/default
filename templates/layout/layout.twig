@@ -27,7 +27,9 @@
     <title>{{ page }} | {{ getEnv('TITLE') }}</title>
 
     <!-- css -->
+    {#
     <link href="{{ getEnv('ASSET_URL') ~ 'js/style.css' }}" rel="stylesheet">
+    #}
 
     <!-- Manifest -->
     <link rel="manifest" href="{{ assetPath }}manifest/manifest.webmanifest?v={{ getVersion('manifest') }}">
@@ -65,15 +67,13 @@
     window.Site = {{ getSiteBundleVariables()|raw }}
 </script>
 
-<script type="module">
-    import {inject} from "https://127.0.0.1:5173/@vite-plugin-checker-runtime";
-
-    inject({
-        overlayConfig: {},
-        base: "/",
-    });
-</script>
-<script type="text/javascript" src="{{ getEnv('ASSET_URL') ~ 'js/site.umd.cjs' }}"></script>
+{% if getEnv('ENVIRONMENT') is same as 'production' %}
+    <script type="text/javascript" src="{{ getEnv('ASSET_URL') ~ 'js/site.umd.cjs' }}"></script>
+{% else %}
+    <script type="module" src="http://127.0.0.1:5173/@vite/client"></script>
+    <script type="module" src="http://127.0.0.1:5173/src/main.ts"></script>
+    <script type="module" src="http://127.0.0.1:5173/@vite-plugin-checker-runtime-entry"></script>
+{% endif %}
 
 </body>
 </html>

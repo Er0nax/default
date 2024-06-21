@@ -4,7 +4,6 @@ export interface Site {
     lang: string;
     environment: string;
     loggedIn: boolean;
-    useBootstrap: boolean;
     swapper: Swapper;
     entry: Entry
 }
@@ -12,6 +11,7 @@ export interface Site {
 export interface Swapper {
     attributeName: string;
     containerId: string;
+    loadingLineId: string;
 }
 
 export interface Entry {

@@ -6,7 +6,6 @@ class SiteModule {
     lang: string;
     environment: string;
     loggedIn: boolean;
-    useBootstrap: boolean;
     swapper: Swapper;
     entry: Entry
 
@@ -20,7 +19,6 @@ class SiteModule {
         this.lang = config.lang;
         this.environment = config.environment;
         this.loggedIn = config.loggedIn;
-        this.useBootstrap = config.useBootstrap;
         this.swapper = config.swapper;
         this.entry = config.entry;
     }

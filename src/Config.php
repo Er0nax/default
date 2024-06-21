@@ -38,8 +38,9 @@ class Config
                 'json' => 120
             ],
             'swapper' => [
-                'attributeName' => 'page',
-                'containerId' => 'page-content'
+                'attributeName' => 'data-page',
+                'containerId' => 'page-content',
+                'loadingLineId' => 'swapper-loading-line'
             ],
             'api' => [
                 'cache' => true,
