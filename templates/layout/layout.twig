@@ -70,9 +70,9 @@
 {% if getEnv('ENVIRONMENT') is same as 'production' %}
     <script type="text/javascript" src="{{ getEnv('ASSET_URL') ~ 'js/site.umd.cjs' }}"></script>
 {% else %}
-    <script type="module" src="http://127.0.0.1:5173/@vite/client"></script>
-    <script type="module" src="http://127.0.0.1:5173/src/main.ts"></script>
-    <script type="module" src="http://127.0.0.1:5173/@vite-plugin-checker-runtime-entry"></script>
+    <script type="module" src="http://localhost:5173/@vite/client"></script>
+    <script type="module" src="http://localhost:5173/src/main.ts"></script>
+    <script type="module" src="http://localhost:5173/@vite-plugin-checker-runtime-entry"></script>
 {% endif %}
 
 </body>
