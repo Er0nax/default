@@ -25,6 +25,7 @@ class SwapperController extends MainController
 
         $content = [
             'content' => $response['content'],
+            'entry' => $response['entry'],
             'msg' => $response['msg'] ?? null,
         ];
 

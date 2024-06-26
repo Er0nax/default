@@ -108,7 +108,7 @@ class FileHelper {
 
         // no buttons with attribute found?
         if (buttonsWithAttribute.length === 0) {
-            log(`Could not find any buttons with attribute "${this.attributeName}"!`, 'throw');
+            log(`Could not find any buttons with attribute "${this.attributeName}"!`, 'warn');
         }
 
         // buttons without attribute found?

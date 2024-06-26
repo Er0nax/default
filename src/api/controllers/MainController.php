@@ -21,7 +21,7 @@ class MainController
     {
         $this->setHeader();
         $config = array_merge(Config::getConfig('api', []), $config);
-        $error = !($status == 200 || $status == true || $status == 'success' || $status == 'OK');
+        $error = !($status === 200 || $status === true || $status === 'success' || $status === 'OK');
 
         // check if data is string
         if (is_string($data) && $config['translate']) {

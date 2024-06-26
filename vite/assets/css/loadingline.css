@@ -1,11 +1,11 @@
-.swapper-loading-line {
+#swapper-loading-line {
     display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 0;
     height: 3px;
-    animation: animation-line-LightColor 0.5s forwards, animation-line-Colors 4s linear infinite;
+    animation: animation-line-LightColor 0.5s forwards, animation-line-Colors 3s linear infinite;
     z-index: 9000 !important;
 }
 

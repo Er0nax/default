@@ -36,17 +36,18 @@ export interface Entry {
     updatedAt: string;
 }
 
-interface SwClickEventDetails extends Event {
+export interface SwClickEventDetails extends Event {
     detail: {
         page: string;
         params: []
     }
 }
 
-interface SwapperResponse {
+export interface SwapperResponse {
     error: boolean;
     cached: boolean;
     response: {
+        entry: Entry;
         content: any;
         msg: string | null;
     }

@@ -12,6 +12,7 @@ class Config
             'useDarkMode' => true,
             'useJQuery' => true,
             'useBootstrap' => true,
+            'useViteDev' => true,
             'unsafeEnvVariables' => [ // these variables will be not be added with putenv()
                 'DBUSER',
                 'DBPASS',

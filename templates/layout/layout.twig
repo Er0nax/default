@@ -27,9 +27,7 @@
     <title>{{ page }} | {{ getEnv('TITLE') }}</title>
 
     <!-- css -->
-    {#
     <link href="{{ getEnv('ASSET_URL') ~ 'js/style.css' }}" rel="stylesheet">
-    #}
 
     <!-- Manifest -->
     <link rel="manifest" href="{{ assetPath }}manifest/manifest.webmanifest?v={{ getVersion('manifest') }}">
@@ -67,7 +65,7 @@
     window.Site = {{ getSiteBundleVariables()|raw }}
 </script>
 
-{% if getEnv('ENVIRONMENT') is same as 'production' %}
+{% if not config.useViteDev %}
     <script type="text/javascript" src="{{ getEnv('ASSET_URL') ~ 'js/site.umd.cjs' }}"></script>
 {% else %}
     <script type="module" src="http://localhost:5173/@vite/client"></script>

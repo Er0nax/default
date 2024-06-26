@@ -1,20 +1,21 @@
 import SiteModule from "@/shared/SiteModule";
 import FileHelper from "@/helpers/FileHelper";
 import EventHelper from "@/helpers/EventHelper";
-import {Entry} from "@/types";
+import RequestHelper from "@/helpers/RequestHelper";
+import {Entry, SwClickEventDetails} from "@/types";
 import {log} from "@/shared/Utils";
 
-class Swapper {
+export default class Swapper {
     entry: Entry;
     container: HTMLElement;
-    loadingLine: HTMLElement;
     buttons: HTMLElement[];
+    requestHelper: RequestHelper;
 
     constructor() {
         this.entry = SiteModule.entry;
         this.container = FileHelper.getContainer() as HTMLElement;
-        this.loadingLine = FileHelper.getLoadingLine();
         this.buttons = FileHelper.getButtons();
+        this.requestHelper = new RequestHelper();
     }
 
     /**
@@ -33,11 +34,17 @@ class Swapper {
         this.listen();
     }
 
+    /**
+     * Listen to swclick events on the container.
+     * @private
+     */
     private listen() {
-        this.container.addEventListener('swclick', (event) => {
-            log(event);
-        })
+        // set this instance
+        this.requestHelper.swapper = this;
+
+        // listen to swclicks
+        this.container.addEventListener('swclick', (async (event: SwClickEventDetails) => {
+            await this.requestHelper.setContent(event);
+        }) as unknown as EventListener);
     }
 }
-
-export default new Swapper();

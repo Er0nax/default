@@ -153,19 +153,22 @@ class Template extends Main
         } catch (\Exception $e) {
             return [
                 'status' => 500,
-                'content' => 'Could not create a new twig environment.',
-                'msg' => $e->getMessage()
+                'content' => $e->getMessage(),
+                'entry' => $entry,
+                'msg' => 'Could not create a new twig environment.'
             ];
         }
 
         // return the template
         return [
             'status' => 200,
+            'entry' => $entry,
             'content' => $template,
         ];
     }
 
     /**
+     * @param array $entry
      * @return Environment
      */
     private function getNewTwig(array $entry): Environment
@@ -176,7 +179,7 @@ class Template extends Main
 
         $cache = false;
         if (Config::getConfig('cacheMode', false)) {
-            $cache = Config::getConfig('folders')['cache'] ?? '../storage/cache';
+            //$cache = Config::getConfig('folders')['cache'] ?? '../storage/cache';
         }
 
         // new loader + twig
