@@ -1,4 +1,4 @@
-import {Entry, Site, Swapper} from '@/types';
+import {Entry, RewriteRoutes, Site, Swapper} from '@/types';
 
 class SiteModule {
     baseUrl: string;
@@ -8,6 +8,7 @@ class SiteModule {
     loggedIn: boolean;
     swapper: Swapper;
     entry: Entry
+    rewriteRoutes: RewriteRoutes
 
     /**
      * get variables from siteassetbundle and make them global.
@@ -21,6 +22,7 @@ class SiteModule {
         this.loggedIn = config.loggedIn;
         this.swapper = config.swapper;
         this.entry = config.entry;
+        this.rewriteRoutes = config.rewriteRoutes;
     }
 }
 

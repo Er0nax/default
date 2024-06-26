@@ -13,8 +13,8 @@ export default class Swapper {
 
     constructor() {
         this.entry = SiteModule.entry;
-        this.container = FileHelper.getContainer() as HTMLElement;
         this.buttons = FileHelper.getButtons();
+        this.container = FileHelper.getContainer() as HTMLElement;
         this.requestHelper = new RequestHelper();
     }
 

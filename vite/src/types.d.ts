@@ -6,6 +6,7 @@ export interface Site {
     loggedIn: boolean;
     swapper: Swapper;
     entry: Entry
+    rewriteRoutes: RewriteRoutes;
 }
 
 export interface Swapper {
@@ -34,6 +35,10 @@ export interface Entry {
     subline: string;
     title: string;
     updatedAt: string;
+}
+
+export interface RewriteRoutes {
+    [key: string]: string;
 }
 
 export interface SwClickEventDetails extends Event {

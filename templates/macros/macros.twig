@@ -1,0 +1,22 @@
+{# Define a Twig macro #}
+{% macro link(options = {}) %}
+
+    {# Set default values for options if not provided #}
+    {% set page = options.page ?? '404' %}
+    {% set text = options.text ?? options.page ?? '404' %}
+    {% set params = options.params ?? {} %}
+    {% set title = options.title ?? text %}
+    {% set classes = options.classes ?? '' %}
+
+    {# build url #}
+    {% set url = page %}
+    {% if params is not empty %}
+        {% set url = page ~ '/' ~ params|join('/') %}
+    {% endif %}
+
+    {# create link #}
+    <a href="{{ url }}"
+       data-page="{{ url }}"
+       title="{{ title }}"
+       class="{{ classes }}">{{ text }}</a>
+{% endmacro %}

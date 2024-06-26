@@ -1,4 +1,6 @@
 import FileHelper from "@/helpers/FileHelper";
+import RequestHelper from "@/helpers/RequestHelper";
+import {SwClickEventDetails} from "@/types";
 
 class EventHelper {
     container: HTMLElement;
