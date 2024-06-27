@@ -54,9 +54,17 @@ export default class RequestHelper {
      * @private
      */
     private updateUrl() {
-        let url: string = SiteModule.baseUrl + this.swapper.entry.name;
+        let url: string = SiteModule.baseUrl;
+
+        if (this.swapper.entry.name !== 'index') {
+            url += this.swapper.entry.name;
+        }
 
         if (this.swapper.entry.params.length > 1) {
+            if (this.swapper.entry.name === 'index') {
+                url += this.swapper.entry.name;
+            }
+
             url += '/' + this.swapper.entry.params.join('/');
         }
 

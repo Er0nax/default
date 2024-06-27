@@ -5,7 +5,7 @@ import RequestHelper from "@/helpers/RequestHelper";
 import {Entry, SwClickEventDetails} from "@/types";
 import {log} from "@/shared/Utils";
 
-export default class Swapper {
+class Swapper {
     entry: Entry;
     container: HTMLElement;
     buttons: HTMLElement[];
@@ -48,3 +48,5 @@ export default class Swapper {
         }) as unknown as EventListener);
     }
 }
+
+export default new Swapper();

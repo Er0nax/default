@@ -2,8 +2,7 @@ import Swapper from '@/controllers/Swapper';
 
 class Main {
     constructor() {
-        const swapper = new Swapper();
-        swapper.start();
+        Swapper.start();
     }
 }
 
