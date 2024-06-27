@@ -10,7 +10,7 @@ class Config
     public static array $config = [
         '*' => [
             'useDarkMode' => true,
-            'useBootstrap' => true,
+            'useBootstrap' => false,
             'useViteDev' => false,
             'unsafeEnvVariables' => [ // these variables will be not be added with putenv()
                 'DBUSER',
