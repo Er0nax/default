@@ -1,9 +1,4 @@
 {% block content %}
-    {{ dump(entry) }}
-
-    {{ '500 - Internal Server Error' }}
-
-    <a href="index" data-page="index">
-        Back Home
-    </a>
+    {{ entry.title }}
+    {{ entry.headline }}
 {% endblock %}

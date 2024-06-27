@@ -4,6 +4,7 @@ export interface Site {
     lang: string;
     environment: string;
     loggedIn: boolean;
+    useBootstrap: boolean;
     swapper: Swapper;
     entry: Entry
     rewriteRoutes: RewriteRoutes;

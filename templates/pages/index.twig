@@ -1,18 +1,3 @@
-{% import 'macros/macros.twig' as macros %}
-
 {% block content %}
-    {{ dump(entry) }}
-
-    <br>
-    <br>
-    <br>
-
-    {{ macros.link({
-        page: 'home',
-        text: 'Homepage',
-        params: [
-            'flurstedt',
-            'ja'
-        ]
-    }) }}
+    {{ entry.title }}
 {% endblock %}
