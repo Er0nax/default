@@ -20,7 +20,6 @@ class SiteAssetBundle
             'lang' => $_SESSION['lang'] ?? getenv('LANG') ?? 'en',
             'environment' => getenv('ENVIRONMENT') ?? 'production',
             'loggedIn' => Config::getConfig('isLoggedIn', false),
-            'useBootstrap' => Config::getConfig('useBootstrap', false),
             'swapper' => Config::getConfig('swapper', []),
             'rewriteRoutes' => Config::getConfig('rewriteRoutes', []),
             'entry' => $entry

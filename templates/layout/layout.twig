@@ -29,6 +29,11 @@
     <!-- css -->
     <link href="{{ getEnv('ASSET_URL') ~ 'js/style.css' }}" rel="stylesheet">
 
+    {# use bootstrap css? #}
+    {% if config.useBootstrap %}
+        <link href="{{ getEnv('ASSET_URL') ~ 'vendor/bootstrap/css/bootstrap.min.css' }}" rel="stylesheet">
+    {% endif %}
+
     <!-- Manifest -->
     <link rel="manifest" href="{{ assetPath }}manifest/manifest.webmanifest?v={{ getVersion('manifest') }}">
     <link rel="apple-touch-icon" href="{{ assetPath }}manifest/icons/icon-512x512.png?v={{ getVersion('manifest') }}"/>
@@ -72,6 +77,12 @@
     <script type="module" src="http://localhost:5173/src/main.ts"></script>
     <script type="module" src="http://localhost:5173/@vite-plugin-checker-runtime-entry"></script>
 {% endif %}
+
+{# use bootstrap js? #}
+{% if config.useBootstrap %}
+    <script type="text/javascript" src="{{ getEnv('ASSET_URL') ~ 'vendor/bootstrap/js/bootstrap.min.js' }}"></script>
+{% endif %}
+
 
 </body>
 </html>
