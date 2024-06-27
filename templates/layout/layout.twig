@@ -31,7 +31,7 @@
 
     {# use bootstrap css? #}
     {% if config.useBootstrap %}
-        <link href="{{ getEnv('ASSET_URL') ~ 'vendor/bootstrap/css/bootstrap.min.css' }}" rel="stylesheet">
+        <link href="{{ getEnv('ASSET_URL') ~ 'dist/bootstrap/css/bootstrap.min.css' }}" rel="stylesheet">
     {% endif %}
 
     <!-- Manifest -->
@@ -80,7 +80,7 @@
 
 {# use bootstrap js? #}
 {% if config.useBootstrap %}
-    <script type="text/javascript" src="{{ getEnv('ASSET_URL') ~ 'vendor/bootstrap/js/bootstrap.min.js' }}"></script>
+    <script type="text/javascript" src="{{ getEnv('ASSET_URL') ~ 'dist/bootstrap/js/bootstrap.min.js' }}"></script>
 {% endif %}
 
 
