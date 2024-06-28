@@ -1,3 +1,9 @@
 {% block content %}
     {{ entry.title }}
+
+    {{ 'Hello World'|t }} <br>
+    {{ 'Hello {name}'|t({ name: 'Tim' }) }} <br>
+    {{ 'Hello with category'|t('app') }} <br>
+    {{ 'Hello with variables ({foo}) and category'|t({foo: 'bar'}, 'app') }} <br>
+    {{ 'Hello with category'|t('foo') }} <br>
 {% endblock %}

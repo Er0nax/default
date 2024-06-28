@@ -72,18 +72,18 @@ class Config
         // get the environment
         $environment = getenv('ENVIRONMENT') ?? 'production';
 
-        // get config from cache if exists
-        $configFromCache = self::getCache();
-        if (!empty($configFromCache) && $environment !== 'dev') {
-
-            // only specific key?
-            if ($variable) {
-                return $configFromCache[$variable] ?? $fallback;
-            }
-
-            // return whole config
-            return $configFromCache;
-        }
+//        // get config from cache if exists
+//        $configFromCache = self::getCache();
+//        if (!empty($configFromCache) && $environment !== 'dev') {
+//
+//            // only specific key?
+//            if ($variable) {
+//                return $configFromCache[$variable] ?? $fallback;
+//            }
+//
+//            // return whole config
+//            return $configFromCache;
+//        }
 
         // add global config
         $config = self::$config['*'];
@@ -105,11 +105,11 @@ class Config
         $config['lang'] = (empty($_SESSION['lang'])) ? getenv('lang') : $_SESSION['lang'];
 
         // cache allowed?
-        if ($config['cacheMode']) {
-            self::setCache($config);
-        } else {
-            self::setCache(false);
-        }
+//        if ($config['cacheMode']) {
+//            self::setCache($config);
+//        } else {
+//            self::setCache(false);
+//        }
 
         // only specific key?
         if ($variable) {

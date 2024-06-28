@@ -3,6 +3,7 @@
 namespace src\services\Twig;
 
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 /**
@@ -11,13 +12,23 @@ use Twig\TwigFunction;
 class Extension extends AbstractExtension
 {
     private Functions $functions;
+    private Filters $filters;
 
+    /**
+     * @param array $entry
+     */
     public function __construct(array $entry)
     {
         $this->functions = new Functions();
         $this->functions->entry = $entry;
+
+        $this->filters = new Filters();
     }
 
+
+    /**
+     * @return array
+     */
     public function getFunctions(): array
     {
         $allFunctions = [];
@@ -28,5 +39,21 @@ class Extension extends AbstractExtension
         }
 
         return $allFunctions;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getFilters(): array
+    {
+        $allFilters = [];
+        $filters = get_class_methods($this->filters);
+
+        foreach ($filters as $method) {
+            $allFilters[] = new TwigFilter($method, [$this->filters, $method]);
+        }
+
+        return $allFilters;
     }
 }

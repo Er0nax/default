@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `api_tokens` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle default.api_tokens: ~1 rows (ungefähr)
+-- Exportiere Daten aus Tabelle default.api_tokens: ~0 rows (ungefähr)
 DELETE FROM `api_tokens`;
 INSERT INTO `api_tokens` (`id`, `ip`, `token`, `uses`, `active`, `created_at`, `updated_at`) VALUES
 	(1, '127.0.0.1', 'ipeuz9GLH2mKwid7OD81HEopwQaKy9', 0, 'true', '2024-06-17 11:50:12', '2024-06-17 11:50:12');
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `api_whitelist` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle default.api_whitelist: ~1 rows (ungefähr)
+-- Exportiere Daten aus Tabelle default.api_whitelist: ~0 rows (ungefähr)
 DELETE FROM `api_whitelist`;
 INSERT INTO `api_whitelist` (`id`, `ip`, `active`, `updated_at`, `created_at`) VALUES
 	(1, '127.0.0.1', 'true', '2024-06-17 11:50:00', '2024-06-17 11:50:00');
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `pages` (
   UNIQUE KEY `index` (`index`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle default.pages: ~5 rows (ungefähr)
+-- Exportiere Daten aus Tabelle default.pages: ~4 rows (ungefähr)
 DELETE FROM `pages`;
 INSERT INTO `pages` (`id`, `index`, `showAlways`, `hideInHeader`, `hideInFooter`, `mustBeLoggedIn`, `isRawPage`, `active`, `showPreloader`, `category`, `color`, `icon`, `name`, `title`, `headline`, `subline`, `updatedAt`, `createdAt`) VALUES
 	(1, 1, 'false', 'false', 'false', 'both', 'false', 'true', 'false', 'normal', '#9899ac', 'circle', 'index', 'Home', 'Welcome.', '', '2024-06-18 14:10:50', '2024-06-17 11:49:14'),
@@ -94,12 +94,18 @@ CREATE TABLE IF NOT EXISTS `translations` (
   `active` enum('true','false') NOT NULL DEFAULT 'true',
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `value` (`value`) USING HASH
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
--- Exportiere Daten aus Tabelle default.translations: ~0 rows (ungefähr)
+-- Exportiere Daten aus Tabelle default.translations: ~6 rows (ungefähr)
 DELETE FROM `translations`;
+INSERT INTO `translations` (`id`, `category`, `value`, `de`, `en`, `active`, `updated_at`, `created_at`) VALUES
+	(1, 'site', 'hello world', 'Hallo Welt', 'Hello World', 'true', '2024-06-28 14:56:01', '2024-06-28 16:40:44'),
+	(2, 'site', 'hello {name}', '', 'Hello {name}', 'true', '2024-06-28 16:40:44', '2024-06-28 16:40:44'),
+	(3, 'app', 'hello with category', 'Hallo mit einer Kategory app', 'Hello with category', 'true', '2024-06-28 15:00:47', '2024-06-28 16:40:44'),
+	(4, 'app', 'hello with variables ({foo}) and category', '', 'Hello with variables ({foo}) and category', 'true', '2024-06-28 16:40:44', '2024-06-28 16:40:44'),
+	(5, 'site', 'jaja', '', 'Jaja', 'true', '2024-06-28 16:57:30', '2024-06-28 16:57:30'),
+	(6, 'foo', 'hello with category', 'Hallo mit einer Kategory foo', 'Hello with category', 'true', '2024-06-28 15:00:43', '2024-06-28 17:00:21');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
